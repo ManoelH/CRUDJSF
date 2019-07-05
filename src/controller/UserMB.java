@@ -21,6 +21,7 @@ public class UserMB {
 	private User userLogado = new User();
 	private UserDAO userDAO = new UserDAO();
 	private List<User> users = new ArrayList<User>();
+	private User userSelecionado = new User();
 	
 	public String login() {
 		String retorno = "";
@@ -52,6 +53,47 @@ public class UserMB {
 		users = userDAO.listarUsers();
 	}
 	
+	public void editarUsuario() {
+		Boolean editado = userDAO.editaUser(user);
+		if(editado) {
+			MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
+			user = new User();
+			PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+			PrimeFaces.current().ajax().update("form-list");
+		}
+		else {
+			MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
+			PrimeFaces.current().ajax().update("form-list");
+		}
+	}
+	
+	public void excluirUsuario() {
+		Boolean excluido = userDAO.excluiUser(user.getId());
+		if(excluido) {
+			MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " excluido com sucesso", "Sucesso!");
+			user = new User();
+			users = userDAO.listarUsers();
+			PrimeFaces.current().executeScript("PF('dialog-exc').hide();");
+			PrimeFaces.current().ajax().update("form-list");
+		}
+		else {
+			MensageUtil.mensagemErro("Erro! ao excluir usuário!", "Erro!");
+			PrimeFaces.current().ajax().update("form-list");
+		}
+	}	
+	
+	public void selecionarUsuario(User user){
+		this.user = user;
+		PrimeFaces.current().ajax().update("form-editar");
+		PrimeFaces.current().executeScript("PF('dialog-edit').show();");
+	}
+	
+	public void selecionarUsuarioExc(User user){
+		this.user = user;
+		PrimeFaces.current().ajax().update("form-excluir");
+		PrimeFaces.current().executeScript("PF('dialog-exc').show();");
+	}
+	
 	public User getUser() {
 		return user;
 	}
@@ -74,6 +116,22 @@ public class UserMB {
 
 	public void setUsers(List<User> users) {
 		this.users = users;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
+	public User getUserSelecionado() {
+		return userSelecionado;
+	}
+
+	public void setUserSelecionado(User userSelecionado) {
+		this.userSelecionado = userSelecionado;
 	}
 	
 }

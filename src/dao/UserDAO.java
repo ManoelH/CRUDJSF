@@ -80,7 +80,7 @@ public class UserDAO {
 	public List<User> listarUsers() {		
 		List<User> users = new ArrayList<User>();
 		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido\n" + 
-				"FROM public.users WHERE excluido is false;";
+				"FROM public.users WHERE excluido is false ORDER BY nome;";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
@@ -110,10 +110,19 @@ public class UserDAO {
 	
 	public boolean editaUser(User user) {
 		Boolean editado = false;
-		String sql ="";
+		String sql ="UPDATE public.users \n" + 
+				"SET nome = ?, email = ?, senha = ?, cpf = ?, celular = ?, genero = ? \n" + 
+				"WHERE id = ?";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, user.getNome());
+			ps.setString(2, user.getEmail());
+			ps.setString(3, user.getSenha());
+			ps.setString(4, user.getCpf());
+			ps.setString(5, user.getCelular());
+			ps.setString(6, user.getGenero());
+			ps.setLong(7, user.getId());
 			ps.executeUpdate();
 			con.commit();
 			editado = true;
@@ -131,10 +140,13 @@ public class UserDAO {
 	
 	public boolean excluiUser(Long idUser) {
 		Boolean excluido = false;
-		String sql ="";
+		String sql ="UPDATE public.users \n" + 
+				"SET excluido = true \n" + 
+				"WHERE id = ?";;
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setLong(1, idUser);
 			ps.executeUpdate();
 			con.commit();
 			excluido = true;

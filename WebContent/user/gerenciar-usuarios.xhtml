@@ -28,10 +28,10 @@
 		</div>
 		
 		<div id="ui-content">
-			<h:form id="form-cad">
+			<h:form id="form-list">
 				<p:growl/>
 				<p:panel id="panelL">
-				<h3 style="margin-left: 30%">Usuários</h3>
+				<h3 style="margin-left: 47%">Usuários</h3>
 					<p:dataTable var="user" value="#{userMB.users}" rows="10"
 						paginator="true" emptyMessage="Não há usuários ativos" 
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -58,12 +58,66 @@
 						</p:column>
 						
 						<p:column headerText="Ações">
-							<p:button value="Editar"/>
-							<p:button value="Excluir"/>
+							<p:commandButton value="Editar" action="#{userMB.selecionarUsuario(user)}"/>
+							<p:commandButton value="Excluir" action="#{userMB.selecionarUsuarioExc(user)}"/>
 						</p:column>
 					</p:dataTable>
 				</p:panel>
 			</h:form>
+			
+			<p:dialog header="Editar usuário" modal="true" widgetVar="dialog-edit" width="500" minHeight="40">
+				<h:form id="form-editar">
+					<p:panel id="panelE">
+						<p:row>
+							<p:outputLabel value="Nome" />
+							<br />
+							<p:inputText value="#{userMB.user.nome}" style="width: 98%;" />
+							<br />
+							<p:outputLabel value="Email" />
+							<br />
+							<p:inputText value="#{userMB.user.email}" type="email"
+								style="width: 98%;" />
+							<br />
+							<p:outputLabel value="CPF" />
+							<br />
+							<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
+								mask="999.999.999-99" />
+							<br />
+							<p:outputLabel value="Celular" />
+							<br />
+							<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
+								mask="(99) 99999-9999" />
+							<br />
+							<p:outputLabel value="Genero" />
+							<br />
+							<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
+								style="width:125px">
+								<f:selectItem itemLabel="Masculino" itemValue="M" />
+								<f:selectItem itemLabel="Feminino" itemValue="F" />
+							</p:selectOneMenu>
+
+							<p:fileUpload mode="advanced" skinSimple="true" />
+							<br />
+							<br />
+							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" style="margin-left:40%;"/>
+						</p:row>
+					</p:panel>
+				</h:form>
+			</p:dialog>
+			
+				<p:dialog header="Excluir usuário" modal="true" widgetVar="dialog-exc" width="500" minHeight="40">
+				<h:form id="form-excluir">
+					<p:panel id="panelEx">
+						<p:row>
+							<h3>Você tem certeza que deseja excluir o usuário 
+								<h:outputText value="#{userMB.user.nome} " style="font-weight:bolder"/>?
+							</h3>
+							<p:commandButton value="Excluir" action="#{userMB.excluirUsuario}" style="margin-left:40%;"/>
+							<p:commandButton value="Cancelar" ajax="true" onclick="PF('dialog-exc').hide();" style="margin-left:40%;"/>
+						</p:row>
+					</p:panel>
+				</h:form>
+			</p:dialog>
 		</div>
 	</div>
 	
