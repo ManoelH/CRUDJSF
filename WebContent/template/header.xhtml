@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="StyleSheet" type="text/css" href="css/estiloTemplate.css" />
+	<title>Template</title>
+</h:head>
+<h:body>
+	
+	<h:form>  
+    <p:growl id="messages"/>
+    <p:menubar>
+ 		<p:menuitem value="Inicio" url="../user/principal.xhtml"/>
+        <p:submenu label="Opções">
+            <p:menuitem value="Cadastro de usuário" url="../user/cadastro.xhtml" />
+            <p:menuitem value="Gerenciar de usuários" url="../user/gerenciar-usuarios.xhtml" />
+        </p:submenu>
+         <f:facet name="options">
+            <p:commandButton type="button" value="Sair" icon="pi pi-sign-out"/>
+        </f:facet>
+     </p:menubar>
+</h:form>
+
+	
+</h:body>
+</html>

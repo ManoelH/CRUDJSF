@@ -7,29 +7,69 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title>Index</title>
+	<title>Cadastro de usuário</title>
 	<link rel="StyleSheet" type="text/css" href="css/styleIndex.css" />
 </h:head>
 <h:body>
-	<h:form>
-		<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 10%;">
-		<p:row>
-			<p:outputLabel value="Email" type="email"/><br/>
-			<p:inputText value="#{userMB.user.email}" style="width: 98%;"/><br/>
-			<p:outputLabel value="Senha"/><br/>
-			<p:inputText value="#{userMB.user.senha}" type="password" style="width: 98%;"/><br/>
-			<p:outputLabel value="CPF"/><br/>
-			<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;" mask="999.999.999-99"/><br/>
-			<p:outputLabel value="Celular"/><br/>
-			<p:inputMask value="#{userMB.user.celular}" style="width: 98%;" mask="(99) 99999-9999"/><br/>
-			<p:outputLabel value="Genero"/><br/>
-			<p:selectOneMenu id="genero" value="#{selectOneMenuView.console}" style="width:125px">
-            	<f:selectItem itemLabel="Masculino" itemValue="M" />
-            	<f:selectItem itemLabel="Feminino" itemValue="F" />
-        	</p:selectOneMenu>
-			<br/><br/><p:commandButton value="Entrar"/>
-		</p:row>
-		</p:panel>
-	</h:form>
+	<div id="page">
+		<div id="ui-header">
+			
+				<p:row style="padding:0px;">
+					<p:column>
+						<ui:insert name="header">
+							<ui:include src="../template/header.xhtml"/>
+						</ui:insert>
+					</p:column>
+				</p:row>
+			
+		</div>
+		
+		<div id="ui-content">
+			<h:form id="form-cad">
+				<p:growl/>
+				<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 7%;">
+				<h3 style="margin-left: 30%">Cadastro de pessoas</h3>
+					<p:row>
+						<p:outputLabel value="Nome"/>
+						<br />
+						<p:inputText value="#{userMB.user.nome}" style="width: 98%;" />
+						<br />
+						<p:outputLabel value="Email"/>
+						<br />
+						<p:inputText value="#{userMB.user.email}" type="email" style="width: 98%;" />
+						<br />
+						<p:outputLabel value="Senha" />
+						<br />
+						<p:inputText value="#{userMB.user.senha}" type="password"
+							style="width: 98%;" />
+						<br />
+						<p:outputLabel value="CPF" />
+						<br />
+						<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
+							mask="999.999.999-99" />
+						<br />
+						<p:outputLabel value="Celular" />
+						<br />
+						<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
+							mask="(99) 99999-9999" />
+						<br />
+						<p:outputLabel value="Genero" />
+						<br />
+						<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
+							style="width:125px">
+							<f:selectItem itemLabel="Masculino" itemValue="M" />
+							<f:selectItem itemLabel="Feminino" itemValue="F" />
+						</p:selectOneMenu>
+						
+						<p:fileUpload mode="advanced" skinSimple="true"/>
+						<br />
+						<br />
+						<p:commandButton value="Cadastrar" action="#{userMB.cadastrarUsuario}"/>
+					</p:row>
+				</p:panel>
+			</h:form>
+		</div>
+	</div>
+	
 </h:body>
 </html>

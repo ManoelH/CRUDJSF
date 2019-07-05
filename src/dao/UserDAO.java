@@ -26,7 +26,7 @@ public class UserDAO {
 			if(rs.next()) {
 				userLogado.setId(rs.getLong("id"));
 				userLogado.setNome(rs.getString("nome"));
-				userLogado.setEmail(rs.getString("String"));
+				userLogado.setEmail(rs.getString("email"));
 				userLogado.setSenha(rs.getString("senha"));
 				userLogado.setCpf(rs.getString("cpf"));
 				userLogado.setCelular(rs.getString("celular"));
@@ -50,10 +50,18 @@ public class UserDAO {
 	
 	public boolean cadUser(User user) {
 		Boolean cadastrado = false;
-		String sql ="";
+		String sql ="INSERT INTO public.users(\n" + 
+				"nome, email, senha, cpf, celular, genero)\n" + 
+				"VALUES (?, ?, ?, ?, ?, ?);";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, user.getNome());
+			ps.setString(2, user.getEmail());
+			ps.setString(3, user.getSenha());
+			ps.setString(4, user.getCpf());
+			ps.setString(5, user.getCelular());
+			ps.setString(6, user.getGenero());
 			ps.executeUpdate();
 			con.commit();
 			cadastrado = true;
@@ -71,13 +79,21 @@ public class UserDAO {
 	
 	public List<User> listarUsers() {		
 		List<User> users = new ArrayList<User>();
-		String sql ="";
+		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido\n" + 
+				"FROM public.users WHERE excluido is false;";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
 				User user = new User();
+				user.setId(rs.getLong("id"));
+				user.setNome(rs.getString("nome"));
+				user.setEmail(rs.getString("email"));
+				user.setCpf(rs.getString("cpf"));
+				user.setCelular(rs.getString("celular"));
+				user.setGenero(rs.getString("genero"));
+				user.setExcluido(rs.getBoolean("excluido"));
 				users.add(user);
 			}
 		} catch (SQLException e) {
