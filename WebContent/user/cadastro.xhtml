@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Index</title>
+	<link rel="StyleSheet" type="text/css" href="css/styleIndex.css" />
+</h:head>
+<h:body>
+	<h:form>
+		<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 10%;">
+		<p:row>
+			<p:outputLabel value="Email" type="email"/><br/>
+			<p:inputText value="#{userMB.user.email}" style="width: 98%;"/><br/>
+			<p:outputLabel value="Senha"/><br/>
+			<p:inputText value="#{userMB.user.senha}" type="password" style="width: 98%;"/><br/>
+			<p:outputLabel value="CPF"/><br/>
+			<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;" mask="999.999.999-99"/><br/>
+			<p:outputLabel value="Celular"/><br/>
+			<p:inputMask value="#{userMB.user.celular}" style="width: 98%;" mask="(99) 99999-9999"/><br/>
+			<p:outputLabel value="Genero"/><br/>
+			<p:selectOneMenu id="genero" value="#{selectOneMenuView.console}" style="width:125px">
+            	<f:selectItem itemLabel="Masculino" itemValue="M" />
+            	<f:selectItem itemLabel="Feminino" itemValue="F" />
+        	</p:selectOneMenu>
+			<br/><br/><p:commandButton value="Entrar"/>
+		</p:row>
+		</p:panel>
+	</h:form>
+</h:body>
+</html>
