@@ -51,8 +51,8 @@ public class UserDAO {
 	public boolean cadUser(User user) {
 		Boolean cadastrado = false;
 		String sql ="INSERT INTO public.users(\n" + 
-				"nome, email, senha, cpf, celular, genero)\n" + 
-				"VALUES (?, ?, ?, ?, ?, ?);";
+				"nome, email, senha, cpf, celular, genero, imagem)\n" + 
+				"VALUES (?, ?, ?, ?, ?, ?, ?);";
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
@@ -62,6 +62,7 @@ public class UserDAO {
 			ps.setString(4, user.getCpf());
 			ps.setString(5, user.getCelular());
 			ps.setString(6, user.getGenero());
+			ps.setBytes(7, user.getImagem());
 			ps.executeUpdate();
 			con.commit();
 			cadastrado = true;

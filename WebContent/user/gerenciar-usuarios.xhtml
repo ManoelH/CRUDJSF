@@ -8,7 +8,7 @@
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Gerenciar usuários</title>
-	<link rel="StyleSheet" type="text/css" href="css/styleIndex.css" />
+
 </h:head>
 <f:metadata>
 	<f:viewAction action="#{userMB.listarUsers}" />
@@ -71,22 +71,22 @@
 						<p:row>
 							<p:outputLabel value="Nome" />
 							<br />
-							<p:inputText value="#{userMB.user.nome}" style="width: 98%;" />
+							<p:inputText value="#{userMB.user.nome}" style="width: 98%;"  required="true" requiredMessage="Por favor insira o nome"/>
 							<br />
 							<p:outputLabel value="Email" />
 							<br />
 							<p:inputText value="#{userMB.user.email}" type="email"
-								style="width: 98%;" />
+								 required="true" requiredMessage="Por favor insira o email" style="width: 98%;" />
 							<br />
 							<p:outputLabel value="CPF" />
 							<br />
 							<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
-								mask="999.999.999-99" />
+								 required="true" requiredMessage="Por favor insira o cpf" mask="999.999.999-99" />
 							<br />
 							<p:outputLabel value="Celular" />
 							<br />
 							<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
-								mask="(99) 99999-9999" />
+								 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
 							<br />
 							<p:outputLabel value="Genero" />
 							<br />
@@ -96,7 +96,6 @@
 								<f:selectItem itemLabel="Feminino" itemValue="F" />
 							</p:selectOneMenu>
 
-							<p:fileUpload mode="advanced" skinSimple="true" />
 							<br />
 							<br />
 							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" style="margin-left:40%;"/>

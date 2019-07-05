@@ -10,6 +10,7 @@ public class User {
 	private String celular;
 	private String genero;
 	private Boolean excluido;
+	private byte[] imagem;
 	
 	public Long getId() {
 		return id;
@@ -59,6 +60,12 @@ public class User {
 	}
 	public void setExcluido(Boolean excluido) {
 		this.excluido = excluido;
+	}
+	public byte[] getImagem() {
+		return imagem;
+	}
+	public void setImagem(byte[] imagem) {
+		this.imagem = imagem;
 	}
 	
 	

@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.FileUploadEvent;
 
 import dao.UserDAO;
 import model.User;
@@ -41,12 +42,9 @@ public class UserMB {
 		if(cadastrado) {
 			MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
 			user = new User();
-			PrimeFaces.current().ajax().update("form-cad");
 		}
-		else {
+		else 
 			MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
-			PrimeFaces.current().ajax().update("form-cad");
-		}
 	}
 	
 	public void listarUsers() {
@@ -81,6 +79,15 @@ public class UserMB {
 			PrimeFaces.current().ajax().update("form-list");
 		}
 	}	
+	
+    public void handleFileUpload(FileUploadEvent event) {
+    	if(event.getFile() != null) {
+        	MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
+        	PrimeFaces.current().ajax().update("form-cad");
+        	this.user.setImagem(event.getFile().getContents());    		
+    	}
+
+    }
 	
 	public void selecionarUsuario(User user){
 		this.user = user;

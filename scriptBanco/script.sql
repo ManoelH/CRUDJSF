@@ -1,7 +1,7 @@
 --TABLES
 create table users 
 (id serial primary key, nome varchar, email varchar, senha varchar, cpf varchar, 
- celular varchar, genero char(1), excluido bool default false)
+ celular varchar, genero char(1), excluido bool default false, imagem bytea)
  
 --LOGIN USER
  INSERT INTO public.users(

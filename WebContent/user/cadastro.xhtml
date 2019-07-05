@@ -8,7 +8,7 @@
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Cadastro de usuário</title>
-	<link rel="StyleSheet" type="text/css" href="css/styleIndex.css" />
+	
 </h:head>
 <h:body>
 	<div id="page">
@@ -32,26 +32,26 @@
 					<p:row>
 						<p:outputLabel value="Nome"/>
 						<br />
-						<p:inputText value="#{userMB.user.nome}" style="width: 98%;" />
+						<p:inputText value="#{userMB.user.nome}" style="width: 98%;" required="true" requiredMessage="Por favor insira o nome"/>
 						<br />
 						<p:outputLabel value="Email"/>
 						<br />
-						<p:inputText value="#{userMB.user.email}" type="email" style="width: 98%;" />
+						<p:inputText value="#{userMB.user.email}" type="email" style="width: 98%;"  required="true" requiredMessage="Por favor insira o email"/>
 						<br />
 						<p:outputLabel value="Senha" />
 						<br />
-						<p:inputText value="#{userMB.user.senha}" type="password"
+						<p:inputText value="#{userMB.user.senha}" type="password"  required="true" requiredMessage="Por favor insira a senha"
 							style="width: 98%;" />
 						<br />
 						<p:outputLabel value="CPF" />
 						<br />
 						<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
-							mask="999.999.999-99" />
+							 required="true" requiredMessage="Por favor insira o cpf" mask="999.999.999-99" />
 						<br />
 						<p:outputLabel value="Celular" />
 						<br />
 						<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
-							mask="(99) 99999-9999" />
+							 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
 						<br />
 						<p:outputLabel value="Genero" />
 						<br />
@@ -60,11 +60,16 @@
 							<f:selectItem itemLabel="Masculino" itemValue="M" />
 							<f:selectItem itemLabel="Feminino" itemValue="F" />
 						</p:selectOneMenu>
+						<br />
 						
-						<p:fileUpload mode="advanced" skinSimple="true"/>
+  						<p:outputLabel value="Imagem: " for="fileUpload" />
+						<p:fileUpload id="fileUpload" fileUploadListener="#{userMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
+						allowTypes="/(\.|\/)(jpe?g|png)$/" invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
+						invalidSizeMessage="São permitidas apenas imagens de até 2 MB" fileLimit="1"  mode="advanced"
+						 required="true" requiredMessage="Por favor insira a imagem"/>
 						<br />
 						<br />
-						<p:commandButton value="Cadastrar" action="#{userMB.cadastrarUsuario}"/>
+						<p:commandButton value="Cadastrar" action="#{userMB.cadastrarUsuario}" ajax="true" update="form-cad"/>
 					</p:row>
 				</p:panel>
 			</h:form>
