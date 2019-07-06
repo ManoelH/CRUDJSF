@@ -8,7 +8,6 @@
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Gerenciar usuários</title>
-
 </h:head>
 <f:metadata>
 	<f:viewAction action="#{userMB.listarUsers}" />
@@ -58,8 +57,10 @@
 						</p:column>
 						
 						<p:column headerText="Ações">
-							<p:commandButton value="Editar" action="#{userMB.selecionarUsuario(user)}"/>
-							<p:commandButton value="Excluir" action="#{userMB.selecionarUsuarioExc(user)}"/>
+							<div style="margin-left:30%">
+							<p:commandButton title="Editar" style="border: none; background: none;" icon="ui-icon-pencil" action="#{userMB.selecionarUsuario(user)}"/>
+								<p:commandButton title="Excluir" style="border: none; background: none;" icon="ui-icon-trash" action="#{userMB.selecionarUsuarioExc(user)}"/>
+							</div>
 						</p:column>
 					</p:dataTable>
 				</p:panel>
@@ -117,6 +118,16 @@
 					</p:panel>
 				</h:form>
 			</p:dialog>
+		</div>
+		
+		<div id="ui-footer">
+			<p:row style="padding:0px;">
+					<p:column>
+						<ui:insert name="footer">
+							<ui:include src="../template/footer.xhtml"/>
+						</ui:insert>
+					</p:column>
+				</p:row>
 		</div>
 	</div>
 	

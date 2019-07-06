@@ -2,6 +2,7 @@ package model;
 
 public class User {
 	
+	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String nome;
 	private String email;
@@ -11,6 +12,9 @@ public class User {
 	private String genero;
 	private Boolean excluido;
 	private byte[] imagem;
+	
+	//USADO PARA O BLOQUEIO DE ACESSO 
+	private String tipo;
 	
 	public Long getId() {
 		return id;
@@ -67,6 +71,14 @@ public class User {
 	public void setImagem(byte[] imagem) {
 		this.imagem = imagem;
 	}
-	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	
 }

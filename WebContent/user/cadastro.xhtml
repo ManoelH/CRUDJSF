@@ -13,7 +13,6 @@
 <h:body>
 	<div id="page">
 		<div id="ui-header">
-			
 				<p:row style="padding:0px;">
 					<p:column>
 						<ui:insert name="header">
@@ -21,14 +20,13 @@
 						</ui:insert>
 					</p:column>
 				</p:row>
-			
 		</div>
 		
 		<div id="ui-content">
 			<h:form id="form-cad">
 				<p:growl/>
 				<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 7%;">
-				<h3 style="margin-left: 30%">Cadastro de pessoas</h3>
+				<h3 style="margin-left: 30%">Cadastro de usuários</h3>
 					<p:row>
 						<p:outputLabel value="Nome"/>
 						<br />
@@ -73,6 +71,16 @@
 					</p:row>
 				</p:panel>
 			</h:form>
+		</div>
+		
+		<div id="ui-footer">
+			<p:row style="padding:0px;">
+					<p:column>
+						<ui:insert name="footer">
+							<ui:include src="../template/footer.xhtml"/>
+						</ui:insert>
+					</p:column>
+				</p:row>
 		</div>
 	</div>
 	

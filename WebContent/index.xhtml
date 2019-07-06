@@ -8,20 +8,42 @@
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<title>Index</title>
-	<link rel="StyleSheet" type="text/css" href="css/styleIndex.css" />
 </h:head>
 <h:body>
-	<h:form id="form">
-		<p:growl id="growl"/>
-		<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 10%;">
-		<p:row>
-			<p:outputLabel value="Email" type="email"/><br/>
-			<p:inputText value="#{userMB.user.email}" style="width: 98%;"/><br/>
-			<p:outputLabel value="Senha"/><br/>
-			<p:inputText value="#{userMB.user.senha}" type="password" style="width: 98%;"/><br/><br/>
-			<p:commandButton value="Login" action="#{userMB.login}" style="margin-left:40%;" icon="pi pi-sign-out"/>
-		</p:row>
-		</p:panel>
-	</h:form>
+	<div id="page">
+		<div id="content">
+			<h:form id="form">
+				<p:growl id="growl" />
+				<p:panel id="panelL"
+					style="width: 42%; margin-left: 30%; margin-top: 10%;">
+					<p:row>
+						<p:outputLabel value="Email" type="email" />
+						<br />
+						<p:inputText value="#{userMB.user.email}" style="width: 98%;" />
+						<br />
+						<p:outputLabel value="Senha" />
+						<br />
+						<p:inputText value="#{userMB.user.senha}" type="password"
+							style="width: 98%;" />
+						<br />
+						<br />
+						<p:commandButton value="Login" action="#{userMB.login}"
+							style="margin-left:40%;"/>
+					</p:row>
+				</p:panel>
+			</h:form>
+		</div>
+		
+		<div id="ui-footer">
+			<p:row style="padding:0px;">
+					<p:column>
+						<ui:insert name="footer">
+							<ui:include src="template/footer.xhtml"/>
+						</ui:insert>
+					</p:column>
+			</p:row>
+		</div>
+	</div>
+	
 </h:body>
 </html>

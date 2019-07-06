@@ -1,10 +1,12 @@
 package controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
@@ -12,6 +14,7 @@ import org.primefaces.event.FileUploadEvent;
 import dao.UserDAO;
 import model.User;
 import util.MensageUtil;
+import util.SessionUtil;
 
 @ManagedBean
 @ViewScoped
@@ -24,18 +27,26 @@ public class UserMB {
 	private List<User> users = new ArrayList<User>();
 	private User userSelecionado = new User();
 	
-	public String login() {
+	public String login() throws IOException {
 		String retorno = "";
 		userLogado = userDAO.loginUsers(user);
 		if(userLogado != null) {
+			userLogado.setTipo("usuario");
+			SessionUtil.setSessionAttribute("usuario", userLogado);
 			retorno = "/user/principal?faces-redirect=true";
 		}
 		else {
+			
 			MensageUtil.mensagemErro("Erro! email ou senha incorretos!", "Erro!");
 			PrimeFaces.current().ajax().update("form");
 		}
 		return retorno;
 	}
+	
+    public void logout() throws IOException {
+        SessionUtil.getSession().invalidate();
+        FacesContext.getCurrentInstance().getExternalContext().redirect("../index.xhtml");
+    }
 	
 	public void cadastrarUsuario() {
 		Boolean cadastrado = userDAO.cadUser(user);
@@ -100,6 +111,7 @@ public class UserMB {
 		PrimeFaces.current().ajax().update("form-excluir");
 		PrimeFaces.current().executeScript("PF('dialog-exc').show();");
 	}
+	
 	
 	public User getUser() {
 		return user;
