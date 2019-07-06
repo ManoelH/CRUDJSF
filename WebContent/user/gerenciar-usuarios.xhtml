@@ -53,6 +53,10 @@
 						<p:column headerText="Email">
 							<h:outputText value="#{user.email}" />
 						</p:column>
+						
+						<p:column headerText="Senha">
+							<h:outputText value="******" />
+						</p:column>
 
 						<p:column headerText="CPF">
 							<h:outputText value="#{user.cpf}" />
@@ -67,7 +71,7 @@
 						</p:column>
 						
 						<p:column headerText="Ações">
-							<div style="margin-left:30%">
+							<div style="margin-left:27%">
 							<p:commandButton title="Editar" style="border: none; background: none;" icon="ui-icon-pencil" action="#{userMB.selecionarUsuario(user)}"/>
 								<p:commandButton title="Excluir" style="border: none; background: none;" icon="ui-icon-trash" action="#{userMB.selecionarUsuarioExc(user)}"/>
 							</div>
@@ -86,8 +90,11 @@
 							<br />
 							<p:outputLabel value="Email" />
 							<br />
-							<p:inputText value="#{userMB.user.email}" type="email"
-								 required="true" requiredMessage="Por favor insira o email" style="width: 98%;" />
+							<p:inputText value="#{userMB.user.email}" type="email" disabled="true"/>
+							<br />
+							<p:outputLabel value="Senha" />
+							<br />
+							<p:inputText value="#{userMB.user.senha}" disabled="true" type="password"  								style="width: 98%;" />
 							<br />
 							<p:outputLabel value="CPF" />
 							<br />
@@ -106,9 +113,34 @@
 								<f:selectItem itemLabel="Masculino" itemValue="M" />
 								<f:selectItem itemLabel="Feminino" itemValue="F" />
 							</p:selectOneMenu>
+							<br />
+							<p:outputLabel value="Imagem: " for="fileUpload" />
+							<p:fileUpload id="fileUpload"
+								fileUploadListener="#{userMB.handleFileUpload}"
+								sizeLimit="2000000" multiple="false" auto="true"
+								allowTypes="/(\.|\/)(jpe?g|png)$/"
+								invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
+								invalidSizeMessage="São permitidas apenas imagens de até 2 MB"
+								fileLimit="1" mode="advanced" disabled="#{userMB.existeImg == true}">
+									<p:autoUpdate/>
+								</p:fileUpload>
+							<p:dataTable var="img" value="#{userMB.imagemInserida}"
+								emptyMessage="Não há imagens inseridas"
+								rowsPerPageTemplate="5,10,15">
+								
+								<p:column headerText="Nome">
+									<h:outputText value="Imagem" />
+								</p:column>
 
+								<p:column headerText="Excluir">
+									<p:commandButton title="Excluir"
+										style="border: none; background: none; margin-left: 37%" icon="ui-icon-trash"
+										action="#{userMB.excluirImagem}" />
+								</p:column>
+								<p:autoUpdate/>
+							</p:dataTable>
 							<br />
-							<br />
+
 							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" ajax="true" update="form-list" style="margin-left:40%;"/>
 						</p:row>
 					</p:panel>

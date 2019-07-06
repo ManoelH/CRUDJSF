@@ -28,6 +28,8 @@ public class UserMB {
 	private List<User> users = new ArrayList<User>();
 	private User userSelecionado = new User();
 	private String filtroNome;
+	private List<User> imagemInserida = new ArrayList<User>();
+	private Boolean existeImg;
 	
 	public String login() throws IOException {
 		String retorno = "";
@@ -53,13 +55,18 @@ public class UserMB {
 	public void cadastrarUsuario() {
 		Boolean cpfValido = ValidaCPFUtil.isCPF(user.getCpf());
 		if(cpfValido) {
-			Boolean cadastrado = userDAO.cadUser(user);
-			if(cadastrado) {
-				MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
-				user = new User();
+			if(user.getImagem() != null) {
+				Boolean cadastrado = userDAO.cadUser(user);
+				if(cadastrado) {
+					MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
+					user = new User();
+				}
+				else 
+					MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
 			}
-			else 
-				MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
+			else
+				MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
+			
 		}
 		else
 			MensageUtil.mensagemWarn("CPF inválido", "Atenção");
@@ -78,14 +85,18 @@ public class UserMB {
 	public void editarUsuario() {
 		Boolean cpfValido = ValidaCPFUtil.isCPF(user.getCpf());
 		if(cpfValido) {
-			Boolean editado = userDAO.editaUser(user);
-			if(editado) {
-				MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
-				user = new User();
-				PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+			if(user.getImagem() != null) {
+				Boolean editado = userDAO.editaUser(user);
+				if(editado) {
+					MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
+					user = new User();
+					PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+				}
+				else 
+					MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
 			}
-			else 
-				MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
+			else
+				MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
 			
 		}
 		else
@@ -110,13 +121,25 @@ public class UserMB {
     public void handleFileUpload(FileUploadEvent event) {
     	if(event.getFile() != null) {
         	MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
-        	this.user.setImagem(event.getFile().getContents());    		
+        	this.user.setImagem(event.getFile().getContents());
+        	existeImg = true;
+        	this.imagemInserida.add(this.user);
     	}
 
     }
 	
+    public void excluirImagem() {
+    	user.setImagem(null);
+    	this.imagemInserida.remove(0);
+    	existeImg = false;
+    	PrimeFaces.current().ajax().update("form-editar");
+    }
+    
 	public void selecionarUsuario(User user){
+		this.imagemInserida = new ArrayList<User>();
 		this.user = user;
+		this.imagemInserida.add(user);
+		existeImg = true;
 		PrimeFaces.current().ajax().update("form-editar");
 		PrimeFaces.current().executeScript("PF('dialog-edit').show();");
 	}
@@ -174,6 +197,22 @@ public class UserMB {
 
 	public void setFiltroNome(String filtroNome) {
 		this.filtroNome = filtroNome;
+	}
+
+	public List<User> getImagemInserida() {
+		return imagemInserida;
+	}
+
+	public void setImagemInserida(List<User> imagemInserida) {
+		this.imagemInserida = imagemInserida;
+	}
+
+	public Boolean getExisteImg() {
+		return existeImg;
+	}
+
+	public void setExisteImg(Boolean existeImg) {
+		this.existeImg = existeImg;
 	}
 	
 }

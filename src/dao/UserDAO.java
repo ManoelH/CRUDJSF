@@ -33,6 +33,7 @@ public class UserDAO {
 				userLogado.setGenero(rs.getString("genero"));
 				userLogado.setExcluido(rs.getBoolean("excluido"));
 			}
+			
 			else 
 				userLogado = null;
 			
@@ -80,7 +81,7 @@ public class UserDAO {
 	
 	public List<User> listarUsers() {		
 		List<User> users = new ArrayList<User>();
-		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido\n" + 
+		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido, senha, imagem\n" + 
 				"FROM public.users WHERE excluido is false ORDER BY nome;";
 		Connection con = ConnectionFactory.getConnection();
 		try {
@@ -95,6 +96,8 @@ public class UserDAO {
 				user.setCelular(rs.getString("celular"));
 				user.setGenero(rs.getString("genero"));
 				user.setExcluido(rs.getBoolean("excluido"));
+				user.setSenha(rs.getString("senha"));
+				user.setImagem(rs.getBytes("imagem"));
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -112,7 +115,7 @@ public class UserDAO {
 	public boolean editaUser(User user) {
 		Boolean editado = false;
 		String sql ="UPDATE public.users \n" + 
-				"SET nome = ?, email = ?, senha = ?, cpf = ?, celular = ?, genero = ? \n" + 
+				"SET nome = ?, email = ?, senha = ?, cpf = ?, celular = ?, genero = ?, imagem = ? \n" + 
 				"WHERE id = ?";
 		Connection con = ConnectionFactory.getConnection();
 		try {
@@ -123,7 +126,8 @@ public class UserDAO {
 			ps.setString(4, user.getCpf());
 			ps.setString(5, user.getCelular());
 			ps.setString(6, user.getGenero());
-			ps.setLong(7, user.getId());
+			ps.setBytes(7, user.getImagem());
+			ps.setLong(8, user.getId());
 			ps.executeUpdate();
 			con.commit();
 			editado = true;
@@ -165,7 +169,7 @@ public class UserDAO {
 	
 	public List<User> filtroUsers(String nome) {		
 		List<User> users = new ArrayList<User>();
-		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido\n" + 
+		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido, senha, imagem\n" + 
 				" FROM public.users WHERE excluido is false and nome ilike ? ORDER BY nome;";
 		Connection con = ConnectionFactory.getConnection();
 		try {
@@ -181,6 +185,8 @@ public class UserDAO {
 				user.setCelular(rs.getString("celular"));
 				user.setGenero(rs.getString("genero"));
 				user.setExcluido(rs.getBoolean("excluido"));
+				user.setSenha(rs.getString("senha"));
+				user.setImagem(rs.getBytes("imagem"));
 				users.add(user);
 			}
 		} catch (SQLException e) {
