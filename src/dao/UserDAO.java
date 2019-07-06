@@ -162,4 +162,36 @@ public class UserDAO {
 		}
 		return excluido;
 	}
+	
+	public List<User> filtroUsers(String nome) {		
+		List<User> users = new ArrayList<User>();
+		String sql ="SELECT id, nome, email, senha, cpf, celular, genero, excluido\n" + 
+				" FROM public.users WHERE excluido is false and nome ilike ? ORDER BY nome;";
+		Connection con = ConnectionFactory.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, "%"+nome+"%");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				User user = new User();
+				user.setId(rs.getLong("id"));
+				user.setNome(rs.getString("nome"));
+				user.setEmail(rs.getString("email"));
+				user.setCpf(rs.getString("cpf"));
+				user.setCelular(rs.getString("celular"));
+				user.setGenero(rs.getString("genero"));
+				user.setExcluido(rs.getBoolean("excluido"));
+				users.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return users;
+	}
 }

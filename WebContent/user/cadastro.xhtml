@@ -23,6 +23,11 @@
 		</div>
 		
 		<div id="ui-content">
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" width="130" height="30"
+				closable="false" resizable="false" showHeader="false">
+				<h:outputLabel value="Carregando..."/>
+			</p:dialog>
 			<h:form id="form-cad">
 				<p:growl/>
 				<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 7%;">
@@ -51,6 +56,12 @@
 						<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
 						<br />
+						<p:outputLabel value="Imagem: " for="fileUpload" />
+						<p:fileUpload id="fileUpload" fileUploadListener="#{userMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
+						allowTypes="/(\.|\/)(jpe?g|png)$/" invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
+						invalidSizeMessage="São permitidas apenas imagens de até 2 MB" fileLimit="1"  mode="advanced"
+						 required="true" requiredMessage="Por favor insira a imagem"/>
+						
 						<p:outputLabel value="Genero" />
 						<br />
 						<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
@@ -59,15 +70,8 @@
 							<f:selectItem itemLabel="Feminino" itemValue="F" />
 						</p:selectOneMenu>
 						<br />
-						
-  						<p:outputLabel value="Imagem: " for="fileUpload" />
-						<p:fileUpload id="fileUpload" fileUploadListener="#{userMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
-						allowTypes="/(\.|\/)(jpe?g|png)$/" invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
-						invalidSizeMessage="São permitidas apenas imagens de até 2 MB" fileLimit="1"  mode="advanced"
-						 required="true" requiredMessage="Por favor insira a imagem"/>
 						<br />
-						<br />
-						<p:commandButton value="Cadastrar" action="#{userMB.cadastrarUsuario}" ajax="true" update="form-cad"/>
+						<p:commandButton value="Cadastrar" style="margin-left:40%;" action="#{userMB.cadastrarUsuario}" ajax="true" update="form-cad"/>
 					</p:row>
 				</p:panel>
 			</h:form>

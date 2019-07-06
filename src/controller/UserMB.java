@@ -15,6 +15,7 @@ import dao.UserDAO;
 import model.User;
 import util.MensageUtil;
 import util.SessionUtil;
+import util.ValidaCPFUtil;
 
 @ManagedBean
 @ViewScoped
@@ -26,6 +27,7 @@ public class UserMB {
 	private UserDAO userDAO = new UserDAO();
 	private List<User> users = new ArrayList<User>();
 	private User userSelecionado = new User();
+	private String filtroNome;
 	
 	public String login() throws IOException {
 		String retorno = "";
@@ -49,31 +51,45 @@ public class UserMB {
     }
 	
 	public void cadastrarUsuario() {
-		Boolean cadastrado = userDAO.cadUser(user);
-		if(cadastrado) {
-			MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
-			user = new User();
+		Boolean cpfValido = ValidaCPFUtil.isCPF(user.getCpf());
+		if(cpfValido) {
+			Boolean cadastrado = userDAO.cadUser(user);
+			if(cadastrado) {
+				MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
+				user = new User();
+			}
+			else 
+				MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
 		}
-		else 
-			MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
+		else
+			MensageUtil.mensagemWarn("CPF inválido", "Atenção");
+		
 	}
 	
 	public void listarUsers() {
 		users = userDAO.listarUsers();
+		filtroNome = "";
+	}
+	
+	public void filtrarUsers() {
+		users = userDAO.filtroUsers(filtroNome);
 	}
 	
 	public void editarUsuario() {
-		Boolean editado = userDAO.editaUser(user);
-		if(editado) {
-			MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
-			user = new User();
-			PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
-			PrimeFaces.current().ajax().update("form-list");
+		Boolean cpfValido = ValidaCPFUtil.isCPF(user.getCpf());
+		if(cpfValido) {
+			Boolean editado = userDAO.editaUser(user);
+			if(editado) {
+				MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
+				user = new User();
+				PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+			}
+			else 
+				MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
+			
 		}
-		else {
-			MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
-			PrimeFaces.current().ajax().update("form-list");
-		}
+		else
+			MensageUtil.mensagemWarn("CPF inválido", "Atenção");
 	}
 	
 	public void excluirUsuario() {
@@ -94,7 +110,6 @@ public class UserMB {
     public void handleFileUpload(FileUploadEvent event) {
     	if(event.getFile() != null) {
         	MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
-        	PrimeFaces.current().ajax().update("form-cad");
         	this.user.setImagem(event.getFile().getContents());    		
     	}
 
@@ -151,6 +166,14 @@ public class UserMB {
 
 	public void setUserSelecionado(User userSelecionado) {
 		this.userSelecionado = userSelecionado;
+	}
+
+	public String getFiltroNome() {
+		return filtroNome;
+	}
+
+	public void setFiltroNome(String filtroNome) {
+		this.filtroNome = filtroNome;
 	}
 	
 }

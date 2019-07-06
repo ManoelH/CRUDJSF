@@ -27,10 +27,20 @@
 		</div>
 		
 		<div id="ui-content">
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
+
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" width="130" height="30"
+				closable="false" resizable="false" showHeader="false">
+				<h:outputLabel value="Carregando..."/>
+			</p:dialog>
 			<h:form id="form-list">
 				<p:growl/>
 				<p:panel id="panelL">
 				<h3 style="margin-left: 47%">Usuários</h3>
+					<p:inputText placeholder="Digite o nome" value="#{userMB.filtroNome}"/> 
+					<p:commandButton title="Buscar" icon="ui-icon-search" ajax="true" update="form-list" action="#{userMB.filtrarUsers}"/>
+					<p:commandButton value="Limpar buscar" ajax="true" update="form-list" action="#{userMB.listarUsers}"/>
 					<p:dataTable var="user" value="#{userMB.users}" rows="10"
 						paginator="true" emptyMessage="Não há usuários ativos" 
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -99,21 +109,23 @@
 
 							<br />
 							<br />
-							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" style="margin-left:40%;"/>
+							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" ajax="true" update="form-list" style="margin-left:40%;"/>
 						</p:row>
 					</p:panel>
 				</h:form>
 			</p:dialog>
 			
-				<p:dialog header="Excluir usuário" modal="true" widgetVar="dialog-exc" width="500" minHeight="40">
+				<p:dialog header="Excluir usuário" modal="true" widgetVar="dialog-exc" width="520" minHeight="40">
 				<h:form id="form-excluir">
 					<p:panel id="panelEx">
 						<p:row>
 							<h3>Você tem certeza que deseja excluir o usuário 
 								<h:outputText value="#{userMB.user.nome} " style="font-weight:bolder"/>?
 							</h3>
-							<p:commandButton value="Excluir" action="#{userMB.excluirUsuario}" style="margin-left:40%;"/>
-							<p:commandButton value="Cancelar" ajax="true" onclick="PF('dialog-exc').hide();" style="margin-left:40%;"/>
+							<div>
+								<p:commandButton value="Excluir" action="#{userMB.excluirUsuario}" style="margin-left:24%;"/>
+								<p:commandButton value="Cancelar" ajax="true" onclick="PF('dialog-exc').hide();" style="margin-left:4%;"/>
+							</div>
 						</p:row>
 					</p:panel>
 				</h:form>
