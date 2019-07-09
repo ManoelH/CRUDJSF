@@ -72,19 +72,20 @@ public class UserMB {
 		if(validarEmail()) {
 			if(validarSenha()) {
 				if(validarCpf()) {
-					if(user.getImagem() != null) {
-						Boolean cadastrado = userDAO.cadUser(user);
-						if(cadastrado) {
-							MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
-							user = new User();
+					if(!cpfJaCadastrado()) {
+						if(user.getImagem() != null) {
+							Boolean cadastrado = userDAO.cadUser(user);
+							if(cadastrado) {
+								MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
+								user = new User();
+							}
+							else 
+								MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
 						}
-						else 
-							MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
+						else
+							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");						
 					}
-					else
-						MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
 				}
-								
 			}
 		}
 	}
@@ -102,18 +103,20 @@ public class UserMB {
 		if(validarEmail()) {
 			if(validarSenha()) {
 				if(validarCpf()) {
-					if(user.getImagem() != null) {
-						Boolean editado = userDAO.editaUser(user);
-						if(editado) {
-							MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
-							user = new User();
-							PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+					if(!cpfJaCadastrado()) {
+						if(user.getImagem() != null) {
+							Boolean editado = userDAO.editaUser(user);
+							if(editado) {
+								MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
+								user = new User();
+								PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
+							}
+							else 
+								MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
 						}
-						else 
-							MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
+						else
+							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");						
 					}
-					else
-						MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
 				}
 			}
 		}
@@ -243,6 +246,15 @@ public class UserMB {
 		if(!cpfValido)
 			MensageUtil.mensagemWarn("CPF inválido", "Atenção");		
 		return cpfValido;
+	}
+	
+	public Boolean cpfJaCadastrado() {
+		Boolean cadastrado = userDAO.existeCpfCadastrado(user.getCpf(), user.getId());
+		if(cadastrado) {
+			MensageUtil.mensagemWarn("CPF já cadastrado", "Atenção");
+			users = userDAO.listarUsers();
+		}
+		return cadastrado;
 	}
 	
 	public User getUser() {

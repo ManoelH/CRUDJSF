@@ -230,6 +230,41 @@ public class UserDAO {
 		return editado;
 	}
 	
+	public Boolean existeCpfCadastrado(String cpf, Long idUser) {		
+		Boolean existe = false;
+		String sql ="select exists (select cpf from public.users where cpf = ?";
+		
+		Connection con = ConnectionFactory.getConnection();
+		try {
+			PreparedStatement ps = null;
+			if(idUser!=null) {
+				sql += " and id !=?)";
+				ps = con.prepareStatement(sql);
+				ps.setString(1, cpf);
+				ps.setLong(2, idUser);
+			}
+			else {
+				sql += ")";
+				ps = con.prepareStatement(sql);
+				ps.setString(1, cpf);
+			}
+
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				existe = rs.getBoolean("exists");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return existe;
+	}
+	
 	public boolean excluiUser(Long idUser) {
 		Boolean excluido = false;
 		String sql ="UPDATE public.users \n" + 
