@@ -35,7 +35,6 @@
 				<h:outputLabel value="Carregando..."/>
 			</p:dialog>
 			<h:form id="form-list">
-				<p:growl/>
 				<p:panel id="panelL">
 				<h3 style="margin-left: 47%">Usuários</h3>
 					<p:inputText placeholder="Digite o nome" value="#{userMB.filtroNome}"/> 
@@ -80,70 +79,110 @@
 				</p:panel>
 			</h:form>
 			
-			<p:dialog header="Editar usuário" modal="true" widgetVar="dialog-edit" width="500" minHeight="40">
+			<p:dialog header="Editar usuário" modal="true" widgetVar="dialog-edit" width="600" minHeight="40">
 				<h:form id="form-editar">
-					<p:panel id="panelE">
-						<p:row>
-							<p:outputLabel value="Nome" />
-							<br />
-							<p:inputText value="#{userMB.user.nome}" style="width: 98%;"  required="true" requiredMessage="Por favor insira o nome"/>
-							<br />
-							<p:outputLabel value="Email" />
-							<br />
-							<p:inputText value="#{userMB.user.email}" type="email" disabled="true"/>
-							<br />
-							<p:outputLabel value="Senha" />
-							<br />
-							<p:inputText value="#{userMB.user.senha}" disabled="true" type="password"  								style="width: 98%;" />
-							<br />
-							<p:outputLabel value="CPF" />
-							<br />
-							<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
-								 required="true" requiredMessage="Por favor insira o cpf" mask="999.999.999-99" />
-							<br />
-							<p:outputLabel value="Celular" />
-							<br />
-							<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
-								 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
-							<br />
-							<p:outputLabel value="Genero" />
-							<br />
-							<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
-								style="width:125px">
-								<f:selectItem itemLabel="Masculino" itemValue="M" />
-								<f:selectItem itemLabel="Feminino" itemValue="F" />
-							</p:selectOneMenu>
-							<br />
-							<p:outputLabel value="Imagem: " for="fileUpload" />
-							<p:fileUpload id="fileUpload"
-								fileUploadListener="#{userMB.handleFileUpload}"
-								sizeLimit="2000000" multiple="false" auto="true"
-								allowTypes="/(\.|\/)(jpe?g|png)$/"
-								invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
-								invalidSizeMessage="São permitidas apenas imagens de até 2 MB"
-								fileLimit="1" mode="advanced" disabled="#{userMB.existeImg == true}">
-									<p:autoUpdate/>
+					<p:growl id="message"/>
+					<p:tabView>
+						<p:tab title="Usuário">
+							<p:row>
+								<p:outputLabel value="Nome" />
+								<br />
+								<p:inputText value="#{userMB.user.nome}" style="width: 98%;"
+									required="true" requiredMessage="Por favor insira o nome" />
+								<br />
+								<p:outputLabel value="Email" />
+								<br />
+								<p:inputText value="#{userMB.user.email}" type="email"
+									disabled="true" />
+								<br />
+								<p:outputLabel value="Senha" />
+								<br />
+								<p:inputText value="#{userMB.user.senha}" disabled="true"
+									type="password" style="width: 98%;" />
+								<br />
+								<p:outputLabel value="CPF" />
+								<br />
+								<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
+									required="true" requiredMessage="Por favor insira o cpf"
+									mask="999.999.999-99" />
+								<br />
+								<p:outputLabel value="Celular" />
+								<br />
+								<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
+									required="true" requiredMessage="Por favor insira o celular"
+									mask="(99) 99999-9999" />
+								<br />
+								<p:outputLabel value="Genero" />
+								<br />
+								<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
+									style="width:125px">
+									<f:selectItem itemLabel="Masculino" itemValue="M" />
+									<f:selectItem itemLabel="Feminino" itemValue="F" />
+								</p:selectOneMenu>
+								<br />
+								<p:outputLabel value="Imagem: " for="fileUpload" />
+								<p:fileUpload id="fileUpload"
+									fileUploadListener="#{userMB.handleFileUpload}"
+									sizeLimit="2000000" multiple="false" auto="true"
+									allowTypes="/(\.|\/)(jpe?g|png)$/"
+									invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
+									invalidSizeMessage="São permitidas apenas imagens de até 2 MB"
+									fileLimit="1" mode="advanced"
+									disabled="#{userMB.existeImg == true}">
+									<p:autoUpdate />
 								</p:fileUpload>
-							<p:dataTable var="img" value="#{userMB.imagemInserida}"
-								emptyMessage="Não há imagens inseridas"
-								rowsPerPageTemplate="5,10,15">
-								
-								<p:column headerText="Nome">
-									<h:outputText value="Imagem" />
-								</p:column>
+								<p:dataTable var="img" value="#{userMB.imagemInserida}"
+									emptyMessage="Não há imagens inseridas"
+									rowsPerPageTemplate="5,10,15">
 
-								<p:column headerText="Excluir">
-									<p:commandButton title="Excluir"
-										style="border: none; background: none; margin-left: 37%" icon="ui-icon-trash"
-										action="#{userMB.excluirImagem}" />
-								</p:column>
-								<p:autoUpdate/>
-							</p:dataTable>
-							<br />
+									<p:column headerText="Nome">
+										<h:outputText value="Imagem" />
+									</p:column>
 
-							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" ajax="true" update="form-list" style="margin-left:40%;"/>
-						</p:row>
-					</p:panel>
+									<p:column headerText="Excluir">
+										<p:commandButton title="Excluir"
+											style="border: none; background: none; margin-left: 37%"
+											icon="ui-icon-trash" action="#{userMB.excluirImagem}" />
+									</p:column>
+									<p:autoUpdate />
+								</p:dataTable>
+								<p:commandButton value="Editar" action="#{userMB.editarUsuario}"
+									ajax="true" update="form-list form-editar" style="margin-left:40%;" />
+
+							</p:row>
+						</p:tab>
+						<p:tab title="Endereço">
+							<p:outputLabel value="CEP" />
+						<br />
+						<p:inputMask value="#{userMB.user.endereco.cep}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o cep" mask="99999-999">
+							<f:ajax listener="#{userMB.checarCepCompletado}" event="blur" 
+							render="form-editar:message local bairro log"/>
+						</p:inputMask>
+						<br /> 
+						<p:outputLabel value="Cidade" />
+						<br />
+						<p:inputText id="local" value="#{userMB.user.endereco.localidade}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira a cidade"/>
+						<br />
+						<p:outputLabel value="Bairro" />
+						<br />
+						<p:inputText id="bairro" value="#{userMB.user.endereco.bairro}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o bairro"/>
+						<br />
+						<p:outputLabel value="Longradouro" />
+						<br />
+						<p:inputText id="log" value="#{userMB.user.endereco.logradouro}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o logradouro"/>
+						<br />
+						<p:outputLabel value="Nº" />
+						<br />
+						<p:inputNumber value="#{userMB.user.endereco.numero}" style="width: 120%;"
+							 required="true" requiredMessage="Por favor insira o número"/>
+							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" ajax="true" update="form-list form-editar" style="margin-left:40%;"/>
+						</p:tab>
+						
+					</p:tabView>
 				</h:form>
 			</p:dialog>
 			

@@ -12,6 +12,7 @@ public class User {
 	private String genero;
 	private Boolean excluido;
 	private byte[] imagem;
+	private Endereco endereco = new Endereco();
 	
 	//USADO PARA O BLOQUEIO DE ACESSO 
 	private String tipo;
@@ -79,6 +80,12 @@ public class User {
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
 	}
 	
 }

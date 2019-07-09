@@ -23,13 +23,14 @@
 		</div>
 		
 		<div id="ui-content">
-
+			<p:ajaxStatus onstart="PF('statusDialog').show()"
+				onsuccess="PF('statusDialog').hide()" />
 			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" width="130" height="30"
 				closable="false" resizable="false" showHeader="false">
 				<h:outputLabel value="Carregando..."/>
 			</p:dialog>
 			<h:form id="form-cad">
-				<p:growl/>
+				<p:growl id="message"/>
 				<p:panel id="panelL" style="width: 42%; margin-left: 30%; margin-top: 7%;">
 				<h3 style="margin-left: 30%">Cadastro de usuários</h3>
 					<p:row>
@@ -44,7 +45,7 @@
 						<p:outputLabel value="Senha" />
 						<br />
 						<p:inputText value="#{userMB.user.senha}" type="password"  required="true" requiredMessage="Por favor insira a senha"
-							style="width: 98%;" />
+							style="width: 98%;"/>
 						<br />
 						<p:outputLabel value="CPF" />
 						<br />
@@ -56,6 +57,35 @@
 						<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
 						<br />
+						<!--  ENDEREÇO -->
+						<p:outputLabel value="CEP" />
+						<br />
+						<p:inputMask value="#{userMB.user.endereco.cep}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o cep" mask="99999-999">
+							<f:ajax listener="#{userMB.checarCepCompletado}" event="blur" 
+							render="message local bairro log"/>
+						</p:inputMask>
+						<br />
+						<p:outputLabel value="Cidade" />
+						<br />
+						<p:inputText id="local" value="#{userMB.user.endereco.localidade}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira a cidade"/>
+						<br />
+						<p:outputLabel value="Bairro" />
+						<br />
+						<p:inputText id="bairro" value="#{userMB.user.endereco.bairro}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o bairro"/>
+						<br />
+						<p:outputLabel value="Longradouro" />
+						<br />
+						<p:inputText id="log" value="#{userMB.user.endereco.logradouro}" style="width: 98%;"
+							 required="true" requiredMessage="Por favor insira o logradouro"/>
+						<br />
+						<p:outputLabel value="Nº" />
+						<br />
+						<p:inputNumber value="#{userMB.user.endereco.numero}" style="width: 120%;"
+							 required="true" requiredMessage="Por favor insira o número"/>
+						<br />						
 						<p:outputLabel value="Imagem: " for="fileUpload" />
 						<p:fileUpload id="fileUpload" fileUploadListener="#{userMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
 						allowTypes="/(\.|\/)(jpe?g|png)$/" invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"

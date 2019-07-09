@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import connection.ConnectionFactory;
+import model.Endereco;
 import model.User;
 
 public class UserDAO {
@@ -53,7 +54,8 @@ public class UserDAO {
 		Boolean cadastrado = false;
 		String sql ="INSERT INTO public.users(\n" + 
 				"nome, email, senha, cpf, celular, genero, imagem)\n" + 
-				"VALUES (?, ?, ?, ?, ?, ?, ?);";
+				"VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id";
+		Long idUser = null;
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql);
@@ -64,9 +66,16 @@ public class UserDAO {
 			ps.setString(5, user.getCelular());
 			ps.setString(6, user.getGenero());
 			ps.setBytes(7, user.getImagem());
-			ps.executeUpdate();
-			con.commit();
-			cadastrado = true;
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				idUser = rs.getLong("id");
+			}
+			
+			cadastrado = cadEndereco(user, idUser, con);
+			if(cadastrado)
+				con.commit();
+			else
+				con.rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -75,6 +84,29 @@ public class UserDAO {
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
+		}
+		return cadastrado;
+	}
+	
+	public boolean cadEndereco(User user, Long idUserCadastrado, Connection con) {
+		Boolean cadastrado = false;
+		String sql ="INSERT INTO public.endereco(\n" + 
+				"id_usuario, cep, cidade, bairro, logradouro, numero)\n" + 
+				"VALUES (?, ?, ?, ?, ?, ?);";
+		
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setLong(1, idUserCadastrado);
+			ps.setString(2, user.getEndereco().getCep());
+			ps.setString(3, user.getEndereco().getLocalidade());
+			ps.setString(4, user.getEndereco().getBairro());
+			ps.setString(5, user.getEndereco().getLogradouro());
+			ps.setInt(6, user.getEndereco().getNumero());
+			ps.executeUpdate();
+			cadastrado = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return cadastrado;
 	}
@@ -112,6 +144,35 @@ public class UserDAO {
 		return users;
 	}
 	
+	public Endereco listarEnderecoUsuario(Long idUser) {		
+		Endereco endereco = new Endereco();
+		String sql ="SELECT id, cep, cidade, bairro, logradouro, numero\n" + 
+				" FROM public.endereco WHERE id_usuario = ?";
+		Connection con = ConnectionFactory.getConnection();
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setLong(1, idUser);
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				endereco.setId(rs.getLong("id"));
+				endereco.setCep(rs.getString("cep"));
+				endereco.setLocalidade(rs.getString("cidade"));
+				endereco.setBairro(rs.getString("bairro"));
+				endereco.setLogradouro(rs.getString("logradouro"));
+				endereco.setNumero(rs.getInt("numero"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				con.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return endereco;
+	}
+	
 	public boolean editaUser(User user) {
 		Boolean editado = false;
 		String sql ="UPDATE public.users \n" + 
@@ -129,8 +190,11 @@ public class UserDAO {
 			ps.setBytes(7, user.getImagem());
 			ps.setLong(8, user.getId());
 			ps.executeUpdate();
-			con.commit();
-			editado = true;
+			editado = editEndereco(user, con);
+			if(editado)
+				con.commit();
+			else
+				con.rollback();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
@@ -139,6 +203,29 @@ public class UserDAO {
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
+		}
+		return editado;
+	}
+	
+	public boolean editEndereco(User user, Connection con) {
+		Boolean editado = false;
+		String sql ="UPDATE public.endereco\n" + 
+				"	SET cep = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ?\n" + 
+				"	WHERE id_usuario = ?";
+		
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, user.getEndereco().getCep());
+			ps.setString(2, user.getEndereco().getLocalidade());
+			ps.setString(3, user.getEndereco().getBairro());
+			ps.setString(4, user.getEndereco().getLogradouro());
+			ps.setInt(5, user.getEndereco().getNumero());
+			ps.setLong(6, user.getId());
+			ps.executeUpdate();
+			editado = true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return editado;
 	}
