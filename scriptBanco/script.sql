@@ -9,7 +9,7 @@ cep varchar (9), cidade varchar (20), bairro varchar (20), logradouro varchar (3
 --LOGIN USER
  INSERT INTO public.users(
 	 nome, email, senha, cpf, celular, genero, excluido, imagem)
-	VALUES ('Manoel', 'teste@teste.com', '123456', '123.456.789-09', '(82)99999-9999', 'M', false, null);
+	VALUES ('Manoel', 'teste@teste.com', '1234567h', '123.456.789-09', '(82)99999-9999', 'M', false, null);
 --ENDEREÇO
 INSERT INTO public.endereco(
 	id_usuario, cep, cidade, bairro, logradouro, numero)
