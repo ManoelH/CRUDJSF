@@ -23,9 +23,9 @@ import org.primefaces.event.FileUploadEvent;
 
 import com.google.gson.Gson;
 
-import dao.UserDAO;
+import dao.UsuarioDAO;
 import model.Endereco;
-import model.User;
+import model.Usuario;
 import util.MensageUtil;
 import util.SessionUtil;
 import util.ValidaCPFUtil;
@@ -37,22 +37,22 @@ import util.ValidaSenhaUtil;
 public class UserMB {
 	
 	
-	private User user = new User();
-	private User userLogado = new User();
-	private UserDAO userDAO = new UserDAO();
-	private List<User> users = new ArrayList<User>();
-	private User userSelecionado = new User();
+	private Usuario usuario = new Usuario();
+	private Usuario usuarioLogado = new Usuario();
+	private UsuarioDAO usuarioDAO = new UsuarioDAO();
+	private List<Usuario> usuarios = new ArrayList<Usuario>();
+	private Usuario usuarioSelecionado = new Usuario();
 	private String filtroNome;
-	private List<User> imagemInserida = new ArrayList<User>();
-	private Boolean existeImg;
+	private List<Usuario> imagemInserida = new ArrayList<Usuario>();
+	private Boolean existeImagem;
 	private Endereco endereco = new Endereco();
 	
 	public String login() throws IOException {
 		String retorno = "";
-		userLogado = userDAO.loginUsers(user);
-		if(userLogado != null) {
-			userLogado.setTipo("usuario");
-			SessionUtil.setSessionAttribute("usuario", userLogado);
+		usuarioLogado = usuarioDAO.loginUsuario(usuario);
+		if(usuarioLogado != null) {
+			usuarioLogado.setTipo("usuario");
+			SessionUtil.setSessionAttribute("usuario", usuarioLogado);
 			retorno = "/user/principal?faces-redirect=true";
 		}
 		else {
@@ -73,11 +73,11 @@ public class UserMB {
 			if(validarSenha()) {
 				if(validarCpf()) {
 					if(!cpfJaCadastrado()) {
-						if(user.getImagem() != null) {
-							Boolean cadastrado = userDAO.cadUser(user);
+						if(usuario.getImagem() != null) {
+							Boolean cadastrado = usuarioDAO.cadastroUsuario(usuario);
 							if(cadastrado) {
 								MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
-								user = new User();
+								usuario = new Usuario();
 							}
 							else 
 								MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
@@ -91,12 +91,12 @@ public class UserMB {
 	}
 	
 	public void listarUsers() {
-		users = userDAO.listarUsers();
+		usuarios = usuarioDAO.listarUsuarios();
 		filtroNome = "";
 	}
 	
 	public void filtrarUsers() {
-		users = userDAO.filtroUsers(filtroNome);
+		usuarios = usuarioDAO.filtroUsuarios(filtroNome);
 	}
 	
 	public void editarUsuario() {
@@ -104,11 +104,11 @@ public class UserMB {
 			if(validarSenha()) {
 				if(validarCpf()) {
 					if(!cpfJaCadastrado()) {
-						if(user.getImagem() != null) {
-							Boolean editado = userDAO.editaUser(user);
+						if(usuario.getImagem() != null) {
+							Boolean editado = usuarioDAO.editaUsuario(usuario);
 							if(editado) {
-								MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " editado com sucesso", "Sucesso!");
-								user = new User();
+								MensageUtil.mensagemInfo("Usuário " +usuario.getNome()+ " editado com sucesso", "Sucesso!");
+								usuario = new Usuario();
 								PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
 							}
 							else 
@@ -124,11 +124,11 @@ public class UserMB {
 	}
 	
 	public void excluirUsuario() {
-		Boolean excluido = userDAO.excluiUser(user.getId());
+		Boolean excluido = usuarioDAO.excluiUsuario(usuario.getId());
 		if(excluido) {
-			MensageUtil.mensagemInfo("Usuário " +user.getNome()+ " excluido com sucesso", "Sucesso!");
-			user = new User();
-			users = userDAO.listarUsers();
+			MensageUtil.mensagemInfo("Usuário " +usuario.getNome()+ " excluido com sucesso", "Sucesso!");
+			usuario = new Usuario();
+			usuarios = usuarioDAO.listarUsuarios();
 			PrimeFaces.current().executeScript("PF('dialog-exc').hide();");
 			PrimeFaces.current().ajax().update("form-list");
 		}
@@ -141,38 +141,38 @@ public class UserMB {
     public void handleFileUpload(FileUploadEvent event) {
     	if(event.getFile() != null) {
         	MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
-        	this.user.setImagem(event.getFile().getContents());
-        	existeImg = true;
-        	this.imagemInserida.add(this.user);
+        	this.usuario.setImagem(event.getFile().getContents());
+        	existeImagem = true;
+        	this.imagemInserida.add(this.usuario);
     	}
 
     }
 	
     public void excluirImagem() {
-    	user.setImagem(null);
+    	usuario.setImagem(null);
     	this.imagemInserida.remove(0);
-    	existeImg = false;
+    	existeImagem = false;
     	PrimeFaces.current().ajax().update("form-editar");
     }
     
-	public void selecionarUsuario(User user){
-		this.imagemInserida = new ArrayList<User>();
-		this.user = user;
+	public void selecionarUsuario(Usuario user){
+		this.imagemInserida = new ArrayList<Usuario>();
+		this.usuario = user;
 		this.imagemInserida.add(user);
-		existeImg = true;
-		user.setEndereco(userDAO.listarEnderecoUsuario(user.getId()));
+		existeImagem = true;
+		user.setEndereco(usuarioDAO.listarEnderecoUsuario(user.getId()));
 		PrimeFaces.current().ajax().update("form-editar");
 		PrimeFaces.current().executeScript("PF('dialog-edit').show();");
 	}
 	
-	public void selecionarUsuarioExc(User user){
-		this.user = user;
+	public void selecionarUsuarioExc(Usuario user){
+		this.usuario = user;
 		PrimeFaces.current().ajax().update("form-excluir");
 		PrimeFaces.current().executeScript("PF('dialog-exc').show();");
 	}
 	
 	public void checarCepCompletado(AjaxBehaviorEvent event) {
-		this.endereco = user.getEndereco();
+		this.endereco = usuario.getEndereco();
 		String cep = this.endereco.getCep();
 		String cepFormatado = cep.replaceAll("\\D", "");
 		if (cepFormatado.length() == 8)
@@ -193,7 +193,7 @@ public class UserMB {
 				FacesContext ct = FacesContext.getCurrentInstance();
 				ct.addMessage(null, msg);
 			} else
-				this.user.setEndereco(endereco);
+				this.usuario.setEndereco(endereco);
 
 		} catch (Exception e) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -226,14 +226,14 @@ public class UserMB {
 	}
 
 	public Boolean validarEmail() {
-		Boolean emailValido = ValidaEmailUtil.isValidEmailAddressRegex(user.getEmail());
+		Boolean emailValido = ValidaEmailUtil.isValidEmailAddressRegex(usuario.getEmail());
 		if(!emailValido)
 			MensageUtil.mensagemWarn("Email inválido", "Atenção");		
 		return emailValido;
 	}
 	
 	public Boolean validarSenha() {
-		Boolean senhaValida = ValidaSenhaUtil.validarSenha(user.getSenha());
+		Boolean senhaValida = ValidaSenhaUtil.validarSenha(usuario.getSenha());
 		if(!senhaValida)
 			MensageUtil.mensagemWarn
 			("Senha inválida, certifique que a senha contém letras, números e que possua pelo menos 8 caracteres"
@@ -242,59 +242,51 @@ public class UserMB {
 	}
 	
 	public Boolean validarCpf() {
-		Boolean cpfValido = ValidaCPFUtil.isCPF(user.getCpf());
+		Boolean cpfValido = ValidaCPFUtil.isCPF(usuario.getCpf());
 		if(!cpfValido)
 			MensageUtil.mensagemWarn("CPF inválido", "Atenção");		
 		return cpfValido;
 	}
 	
 	public Boolean cpfJaCadastrado() {
-		Boolean cadastrado = userDAO.existeCpfCadastrado(user.getCpf(), user.getId());
+		Boolean cadastrado = usuarioDAO.existeCpfCadastrado(usuario.getCpf(), usuario.getId());
 		if(cadastrado) {
 			MensageUtil.mensagemWarn("CPF já cadastrado", "Atenção");
-			users = userDAO.listarUsers();
+			usuarios = usuarioDAO.listarUsuarios();
 		}
 		return cadastrado;
 	}
-	
-	public User getUser() {
-		return user;
+
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
-	public User getUserLogado() {
-		return userLogado;
+	public Usuario getUsuarioLogado() {
+		return usuarioLogado;
 	}
 
-	public void setUserLogado(User userLogado) {
-		this.userLogado = userLogado;
+	public void setUsuarioLogado(Usuario usuarioLogado) {
+		this.usuarioLogado = usuarioLogado;
 	}
 
-	public List<User> getUsers() {
-		return users;
+	public List<Usuario> getUsuarios() {
+		return usuarios;
 	}
 
-	public void setUsers(List<User> users) {
-		this.users = users;
+	public void setUsuarios(List<Usuario> usuarios) {
+		this.usuarios = usuarios;
 	}
 
-	public UserDAO getUserDAO() {
-		return userDAO;
+	public Usuario getUsuarioSelecionado() {
+		return usuarioSelecionado;
 	}
 
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-
-	public User getUserSelecionado() {
-		return userSelecionado;
-	}
-
-	public void setUserSelecionado(User userSelecionado) {
-		this.userSelecionado = userSelecionado;
+	public void setUsuarioSelecionado(Usuario usuarioSelecionado) {
+		this.usuarioSelecionado = usuarioSelecionado;
 	}
 
 	public String getFiltroNome() {
@@ -305,20 +297,28 @@ public class UserMB {
 		this.filtroNome = filtroNome;
 	}
 
-	public List<User> getImagemInserida() {
+	public List<Usuario> getImagemInserida() {
 		return imagemInserida;
 	}
 
-	public void setImagemInserida(List<User> imagemInserida) {
+	public void setImagemInserida(List<Usuario> imagemInserida) {
 		this.imagemInserida = imagemInserida;
 	}
 
-	public Boolean getExisteImg() {
-		return existeImg;
+	public Boolean getExisteImagem() {
+		return existeImagem;
 	}
 
-	public void setExisteImg(Boolean existeImg) {
-		this.existeImg = existeImg;
+	public void setExisteImagem(Boolean existeImagem) {
+		this.existeImagem = existeImagem;
 	}
-	
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+		
 }

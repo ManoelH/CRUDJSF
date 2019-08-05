@@ -4,7 +4,7 @@ package util;
   import javax.servlet.http.HttpServletRequest; 
   import javax.servlet.http.HttpSession;
   
-  import model.User;
+  import model.Usuario;
   
   
   public class SessionUtil {
@@ -15,19 +15,19 @@ package util;
   public static HttpServletRequest getRequest() { return (HttpServletRequest)
   FacesContext.getCurrentInstance().getExternalContext().getRequest(); }
   
-  public static String getNomeUsuario() { return ((User)
+  public static String getNomeUsuario() { return ((Usuario)
   getSession().getAttribute("usuario")).getNome(); }
   
-  public static Long getIdUsuario() { return (long) ((User)
+  public static Long getIdUsuario() { return (long) ((Usuario)
   getSession().getAttribute("usuario")).getId(); }
   
-  public static User getUsuario() { return ((User)
+  public static Usuario getUsuario() { return ((Usuario)
   getSession().getAttribute("usuario")); }
   
-  public static User getUsuarioServidor() { return ((User)
+  public static Usuario getUsuarioServidor() { return ((Usuario)
   getSession().getAttribute("usuario")); }
   
-  public static User getUsuarioContribuinte() { return ((User)
+  public static Usuario getUsuarioContribuinte() { return ((Usuario)
   getSession().getAttribute("usuario")); }
   
   public static void setSessionAttribute(String attrName, Object attrValue) {

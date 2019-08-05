@@ -40,17 +40,17 @@
 					<p:inputText placeholder="Digite o nome" value="#{userMB.filtroNome}"/> 
 					<p:commandButton title="Buscar" icon="ui-icon-search" ajax="true" update="form-list" action="#{userMB.filtrarUsers}"/>
 					<p:commandButton value="Limpar buscar" ajax="true" update="form-list" action="#{userMB.listarUsers}"/>
-					<p:dataTable var="user" value="#{userMB.users}" rows="10"
+					<p:dataTable var="usuario" value="#{userMB.usuarios}" rows="10"
 						paginator="true" emptyMessage="Não há usuários ativos" 
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15">
 
 						<p:column headerText="Nome">
-							<h:outputText value="#{user.nome}" />
+							<h:outputText value="#{usuario.nome}" />
 						</p:column>
 
 						<p:column headerText="Email">
-							<h:outputText value="#{user.email}" />
+							<h:outputText value="#{usuario.email}" />
 						</p:column>
 						
 						<p:column headerText="Senha">
@@ -58,21 +58,21 @@
 						</p:column>
 
 						<p:column headerText="CPF">
-							<h:outputText value="#{user.cpf}" />
+							<h:outputText value="#{usuario.cpf}" />
 						</p:column>
 						
 						<p:column headerText="Celular">
-							<h:outputText value="#{user.celular}" />
+							<h:outputText value="#{usuario.celular}" />
 						</p:column>
 						
 						<p:column headerText="Genero">
-							<h:outputText value="#{user.genero}" />
+							<h:outputText value="#{usuario.genero}" />
 						</p:column>
 						
 						<p:column headerText="Ações">
 							<div style="margin-left:27%">
-							<p:commandButton title="Editar" style="border: none; background: none;" icon="ui-icon-pencil" action="#{userMB.selecionarUsuario(user)}"/>
-								<p:commandButton title="Excluir" style="border: none; background: none;" icon="ui-icon-trash" action="#{userMB.selecionarUsuarioExc(user)}"/>
+							<p:commandButton title="Editar" style="border: none; background: none;" icon="ui-icon-pencil" action="#{userMB.selecionarUsuario(usuario)}"/>
+								<p:commandButton title="Excluir" style="border: none; background: none;" icon="ui-icon-trash" action="#{userMB.selecionarUsuarioExc(usuario)}"/>
 							</div>
 						</p:column>
 					</p:dataTable>
@@ -87,34 +87,34 @@
 							<p:row>
 								<p:outputLabel value="Nome" />
 								<br />
-								<p:inputText value="#{userMB.user.nome}" style="width: 98%;"
+								<p:inputText value="#{userMB.usuario.nome}" style="width: 98%;"
 									required="true" requiredMessage="Por favor insira o nome" />
 								<br />
 								<p:outputLabel value="Email" />
 								<br />
-								<p:inputText value="#{userMB.user.email}" type="email"
+								<p:inputText value="#{userMB.usuario.email}" type="email"
 									disabled="true" />
 								<br />
 								<p:outputLabel value="Senha" />
 								<br />
-								<p:inputText value="#{userMB.user.senha}" disabled="true"
+								<p:inputText value="#{userMB.usuario.senha}" disabled="true"
 									type="password" style="width: 98%;" />
 								<br />
 								<p:outputLabel value="CPF" />
 								<br />
-								<p:inputMask value="#{userMB.user.cpf}" style="width: 98%;"
+								<p:inputMask value="#{userMB.usuario.cpf}" style="width: 98%;"
 									required="true" requiredMessage="Por favor insira o cpf"
 									mask="999.999.999-99" />
 								<br />
 								<p:outputLabel value="Celular" />
 								<br />
-								<p:inputMask value="#{userMB.user.celular}" style="width: 98%;"
+								<p:inputMask value="#{userMB.usuario.celular}" style="width: 98%;"
 									required="true" requiredMessage="Por favor insira o celular"
 									mask="(99) 99999-9999" />
 								<br />
 								<p:outputLabel value="Genero" />
 								<br />
-								<p:selectOneMenu id="genero" value="#{userMB.user.genero}"
+								<p:selectOneMenu id="genero" value="#{userMB.usuario.genero}"
 									style="width:125px">
 									<f:selectItem itemLabel="Masculino" itemValue="M" />
 									<f:selectItem itemLabel="Feminino" itemValue="F" />
@@ -128,7 +128,7 @@
 									invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
 									invalidSizeMessage="São permitidas apenas imagens de até 2 MB"
 									fileLimit="1" mode="advanced"
-									disabled="#{userMB.existeImg == true}">
+									disabled="#{userMB.existeImagem == true}">
 									<p:autoUpdate />
 								</p:fileUpload>
 								<p:dataTable var="img" value="#{userMB.imagemInserida}"
@@ -154,7 +154,7 @@
 						<p:tab title="Endereço">
 							<p:outputLabel value="CEP" />
 						<br />
-						<p:inputMask value="#{userMB.user.endereco.cep}" style="width: 98%;"
+						<p:inputMask value="#{userMB.usuario.endereco.cep}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o cep" mask="99999-999">
 							<f:ajax listener="#{userMB.checarCepCompletado}" event="blur" 
 							render="form-editar:message local bairro log"/>
@@ -162,22 +162,22 @@
 						<br /> 
 						<p:outputLabel value="Cidade" />
 						<br />
-						<p:inputText id="local" value="#{userMB.user.endereco.localidade}" style="width: 98%;"
+						<p:inputText id="local" value="#{userMB.usuario.endereco.localidade}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira a cidade"/>
 						<br />
 						<p:outputLabel value="Bairro" />
 						<br />
-						<p:inputText id="bairro" value="#{userMB.user.endereco.bairro}" style="width: 98%;"
+						<p:inputText id="bairro" value="#{userMB.usuario.endereco.bairro}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o bairro"/>
 						<br />
 						<p:outputLabel value="Longradouro" />
 						<br />
-						<p:inputText id="log" value="#{userMB.user.endereco.logradouro}" style="width: 98%;"
+						<p:inputText id="log" value="#{userMB.usuario.endereco.logradouro}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o logradouro"/>
 						<br />
 						<p:outputLabel value="Nº" />
 						<br />
-						<p:inputNumber value="#{userMB.user.endereco.numero}" style="width: 120%;"
+						<p:inputNumber value="#{userMB.usuario.endereco.numero}" style="width: 120%;"
 							 required="true" requiredMessage="Por favor insira o número"/>
 							<p:commandButton value="Editar" action="#{userMB.editarUsuario}" ajax="true" update="form-list form-editar" style="margin-left:40%;"/>
 						</p:tab>
@@ -191,7 +191,7 @@
 					<p:panel id="panelEx">
 						<p:row>
 							<h3>Você tem certeza que deseja excluir o usuário 
-								<h:outputText value="#{userMB.user.nome} " style="font-weight:bolder"/>?
+								<h:outputText value="#{userMB.usuario.nome} " style="font-weight:bolder"/>?
 							</h3>
 							<div>
 								<p:commandButton value="Excluir" action="#{userMB.excluirUsuario}" style="margin-left:24%;"/>

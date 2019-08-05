@@ -1,6 +1,6 @@
 package model;
 
-public class User {
+public class Usuario {
 	
 	private static final long serialVersionUID = 1L;
 	private Long id;
