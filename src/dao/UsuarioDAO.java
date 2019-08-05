@@ -61,17 +61,10 @@ public class UsuarioDAO {
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql.toString());
-			ps.setString(1, usuario.getNome());
-			ps.setString(2, usuario.getEmail());
-			ps.setString(3, usuario.getSenha());
-			ps.setString(4, usuario.getCpf());
-			ps.setString(5, usuario.getCelular());
-			ps.setString(6, usuario.getGenero());
-			ps.setBytes(7, usuario.getImagem());
+			mapearPreparedStatement(usuario, ps);
 			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
+			if (rs.next())
 				idUsuario = rs.getLong("id");
-			}
 
 			cadastrado = cadastroEndereco(usuario, idUsuario, con);
 			if (cadastrado)
@@ -187,13 +180,7 @@ public class UsuarioDAO {
 		Connection con = ConnectionFactory.getConnection();
 		try {
 			PreparedStatement ps = con.prepareStatement(sql.toString());
-			ps.setString(1, usuario.getNome());
-			ps.setString(2, usuario.getEmail());
-			ps.setString(3, usuario.getSenha());
-			ps.setString(4, usuario.getCpf());
-			ps.setString(5, usuario.getCelular());
-			ps.setString(6, usuario.getGenero());
-			ps.setBytes(7, usuario.getImagem());
+			mapearPreparedStatement(usuario, ps);
 			ps.setLong(8, usuario.getId());
 			ps.executeUpdate();
 			editado = editaEndereco(usuario, con);
@@ -211,6 +198,21 @@ public class UsuarioDAO {
 			}
 		}
 		return editado;
+	}
+	
+	public void mapearPreparedStatement(Usuario usuario, PreparedStatement ps){
+		try {
+			ps.setString(1, usuario.getNome());
+			ps.setString(2, usuario.getEmail());
+			ps.setString(3, usuario.getSenha());
+			ps.setString(4, usuario.getCpf());
+			ps.setString(5, usuario.getCelular());
+			ps.setString(6, usuario.getGenero());
+			ps.setBytes(7, usuario.getImagem());
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	public boolean editaEndereco(Usuario usuario, Connection con) {

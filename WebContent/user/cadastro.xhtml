@@ -36,71 +36,71 @@
 					<p:row>
 						<p:outputLabel value="Nome"/>
 						<br />
-						<p:inputText value="#{userMB.usuario.nome}" style="width: 98%;" required="true" requiredMessage="Por favor insira o nome"/>
+						<p:inputText value="#{usuarioMB.usuario.nome}" style="width: 98%;" required="true" requiredMessage="Por favor insira o nome"/>
 						<br />
 						<p:outputLabel value="Email"/>
 						<br />
-						<p:inputText value="#{userMB.usuario.email}" type="email" style="width: 98%;"  required="true" requiredMessage="Por favor insira o email"/>
+						<p:inputText value="#{usuarioMB.usuario.email}" type="email" style="width: 98%;"  required="true" requiredMessage="Por favor insira o email"/>
 						<br />
 						<p:outputLabel value="Senha" />
 						<br />
-						<p:inputText value="#{userMB.usuario.senha}" type="password"  required="true" requiredMessage="Por favor insira a senha"
+						<p:inputText value="#{usuarioMB.usuario.senha}" type="password"  required="true" requiredMessage="Por favor insira a senha"
 							style="width: 98%;"/>
 						<br />
 						<p:outputLabel value="CPF" />
 						<br />
-						<p:inputMask value="#{userMB.usuario.cpf}" style="width: 98%;"
+						<p:inputMask value="#{usuarioMB.usuario.cpf}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o cpf" mask="999.999.999-99" />
 						<br />
 						<p:outputLabel value="Celular" />
 						<br />
-						<p:inputMask value="#{userMB.usuario.celular}" style="width: 98%;"
+						<p:inputMask value="#{usuarioMB.usuario.celular}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o celular" mask="(99) 99999-9999" />
 						<br />
 						<!--  ENDEREÇO -->
 						<p:outputLabel value="CEP" />
 						<br />
-						<p:inputMask value="#{userMB.usuario.endereco.cep}" style="width: 98%;"
+						<p:inputMask value="#{usuarioMB.usuario.endereco.cep}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o cep" mask="99999-999">
-							<f:ajax listener="#{userMB.checarCepCompletado}" event="blur" 
+							<f:ajax listener="#{usuarioMB.checarCepCompletado}" event="blur" 
 							render="message local bairro log"/>
 						</p:inputMask>
 						<br />
 						<p:outputLabel value="Cidade" />
 						<br />
-						<p:inputText id="local" value="#{userMB.usuario.endereco.localidade}" style="width: 98%;"
+						<p:inputText id="local" value="#{usuarioMB.usuario.endereco.localidade}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira a cidade"/>
 						<br />
 						<p:outputLabel value="Bairro" />
 						<br />
-						<p:inputText id="bairro" value="#{userMB.usuario.endereco.bairro}" style="width: 98%;"
+						<p:inputText id="bairro" value="#{usuarioMB.usuario.endereco.bairro}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o bairro"/>
 						<br />
 						<p:outputLabel value="Longradouro" />
 						<br />
-						<p:inputText id="log" value="#{userMB.usuario.endereco.logradouro}" style="width: 98%;"
+						<p:inputText id="log" value="#{usuarioMB.usuario.endereco.logradouro}" style="width: 98%;"
 							 required="true" requiredMessage="Por favor insira o logradouro"/>
 						<br />
 						<p:outputLabel value="Nº" />
 						<br />
-						<p:inputNumber value="#{userMB.usuario.endereco.numero}" style="width: 120%;"
+						<p:inputNumber value="#{usuarioMB.usuario.endereco.numero}" style="width: 120%;"
 							 required="true" requiredMessage="Por favor insira o número"/>
 						<br />						
 						<p:outputLabel value="Imagem: " for="fileUpload" />
-						<p:fileUpload id="fileUpload" fileUploadListener="#{userMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
+						<p:fileUpload id="fileUpload" fileUploadListener="#{usuarioMB.handleFileUpload}" sizeLimit="2000000" multiple="false" auto="true" 
 						allowTypes="/(\.|\/)(jpe?g|png)$/" invalidFileMessage="São permitidas somente imagens (jpeg, jpg e png)"
 						invalidSizeMessage="São permitidas apenas imagens de até 2 MB" fileLimit="1"  mode="advanced"/>
 						
 						<p:outputLabel value="Genero" />
 						<br />
-						<p:selectOneMenu id="genero" value="#{userMB.usuario.genero}"
+						<p:selectOneMenu id="genero" value="#{usuarioMB.usuario.genero}"
 							style="width:125px">
 							<f:selectItem itemLabel="Masculino" itemValue="M" />
 							<f:selectItem itemLabel="Feminino" itemValue="F" />
 						</p:selectOneMenu>
 						<br />
 						<br />
-						<p:commandButton value="Cadastrar" style="margin-left:40%;" action="#{userMB.cadastrarUsuario}" ajax="true" update="form-cad"/>
+						<p:commandButton value="Cadastrar" style="margin-left:40%;" action="#{usuarioMB.cadastrarUsuario}" ajax="true" update="form-cad"/>
 					</p:row>
 				</p:panel>
 			</h:form>

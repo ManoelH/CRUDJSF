@@ -34,9 +34,8 @@ import util.ValidaSenhaUtil;
 
 @ManagedBean
 @ViewScoped
-public class UserMB {
-	
-	
+public class UsuarioMB {
+
 	private Usuario usuario = new Usuario();
 	private Usuario usuarioLogado = new Usuario();
 	private UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -46,116 +45,111 @@ public class UserMB {
 	private List<Usuario> imagemInserida = new ArrayList<Usuario>();
 	private Boolean existeImagem;
 	private Endereco endereco = new Endereco();
-	
+
 	public String login() throws IOException {
 		String retorno = "";
 		usuarioLogado = usuarioDAO.loginUsuario(usuario);
-		if(usuarioLogado != null) {
+		if (usuarioLogado != null) {
 			usuarioLogado.setTipo("usuario");
 			SessionUtil.setSessionAttribute("usuario", usuarioLogado);
 			retorno = "/user/principal?faces-redirect=true";
-		}
-		else {
-			
+		} else {
+
 			MensageUtil.mensagemErro("Erro! email ou senha incorretos!", "Erro!");
 			PrimeFaces.current().ajax().update("form");
 		}
 		return retorno;
 	}
-	
-    public void logout() throws IOException {
-        SessionUtil.getSession().invalidate();
-        FacesContext.getCurrentInstance().getExternalContext().redirect("../index.xhtml");
-    }
-	
-	public void cadastrarUsuario() {		
-		if(validarEmail()) {
-			if(validarSenha()) {
-				if(validarCpf()) {
-					if(!cpfJaCadastrado()) {
-						if(usuario.getImagem() != null) {
+
+	public void logout() throws IOException {
+		SessionUtil.getSession().invalidate();
+		FacesContext.getCurrentInstance().getExternalContext().redirect("../index.xhtml");
+	}
+
+	public void cadastrarUsuario() {
+		if (validarEmail()) {
+			if (validarSenha()) {
+				if (validarCpf()) {
+					if (!cpfJaCadastrado()) {
+						if (usuario.getImagem() != null) {
 							Boolean cadastrado = usuarioDAO.cadastroUsuario(usuario);
-							if(cadastrado) {
+							if (cadastrado) {
 								MensageUtil.mensagemInfo("Usuário cadastrado com sucesso", "Sucesso!");
 								usuario = new Usuario();
-							}
-							else 
+							} else
 								MensageUtil.mensagemErro("Erro! ao cadastrar usuário!", "Erro!");
-						}
-						else
-							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");						
+						} else
+							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
 					}
 				}
 			}
 		}
 	}
-	
-	public void listarUsers() {
+
+	public void listarUsuarios() {
 		usuarios = usuarioDAO.listarUsuarios();
 		filtroNome = "";
 	}
-	
-	public void filtrarUsers() {
+
+	public void filtrarUsuarios() {
 		usuarios = usuarioDAO.filtroUsuarios(filtroNome);
 	}
-	
+
 	public void editarUsuario() {
-		if(validarEmail()) {
-			if(validarSenha()) {
-				if(validarCpf()) {
-					if(!cpfJaCadastrado()) {
-						if(usuario.getImagem() != null) {
+		if (validarEmail()) {
+			if (validarSenha()) {
+				if (validarCpf()) {
+					if (!cpfJaCadastrado()) {
+						if (usuario.getImagem() != null) {
 							Boolean editado = usuarioDAO.editaUsuario(usuario);
-							if(editado) {
-								MensageUtil.mensagemInfo("Usuário " +usuario.getNome()+ " editado com sucesso", "Sucesso!");
+							if (editado) {
+								MensageUtil.mensagemInfo("Usuário " + usuario.getNome() + " editado com sucesso",
+										"Sucesso!");
 								usuario = new Usuario();
 								PrimeFaces.current().executeScript("PF('dialog-edit').hide();");
-							}
-							else 
+							} else
 								MensageUtil.mensagemErro("Erro! ao editar usuário!", "Erro!");
-						}
-						else
-							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");						
+						} else
+							MensageUtil.mensagemWarn("Por favor insira a imagem", "Atenção");
 					}
 				}
 			}
 		}
 
 	}
-	
+
 	public void excluirUsuario() {
 		Boolean excluido = usuarioDAO.excluiUsuario(usuario.getId());
-		if(excluido) {
-			MensageUtil.mensagemInfo("Usuário " +usuario.getNome()+ " excluido com sucesso", "Sucesso!");
+		if (excluido) {
+			MensageUtil.mensagemInfo("Usuário " + usuario.getNome() + " excluido com sucesso", "Sucesso!");
 			usuario = new Usuario();
 			usuarios = usuarioDAO.listarUsuarios();
 			PrimeFaces.current().executeScript("PF('dialog-exc').hide();");
 			PrimeFaces.current().ajax().update("form-list");
-		}
-		else {
+		} else {
 			MensageUtil.mensagemErro("Erro! ao excluir usuário!", "Erro!");
 			PrimeFaces.current().ajax().update("form-list");
 		}
-	}	
-	
-    public void handleFileUpload(FileUploadEvent event) {
-    	if(event.getFile() != null) {
-        	MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
-        	this.usuario.setImagem(event.getFile().getContents());
-        	existeImagem = true;
-        	this.imagemInserida.add(this.usuario);
-    	}
+	}
 
-    }
-	
-    public void excluirImagem() {
-    	usuario.setImagem(null);
-    	this.imagemInserida.remove(0);
-    	existeImagem = false;
-    	PrimeFaces.current().ajax().update("form-editar");
-    }
-    
-	public void selecionarUsuario(Usuario user){
+	public void handleFileUpload(FileUploadEvent event) {
+		if (event.getFile() != null) {
+			MensageUtil.mensagemInfo("Upload da imagem " + event.getFile().getFileName(), "Sucesso");
+			this.usuario.setImagem(event.getFile().getContents());
+			existeImagem = true;
+			this.imagemInserida.add(this.usuario);
+		}
+
+	}
+
+	public void excluirImagem() {
+		usuario.setImagem(null);
+		this.imagemInserida.remove(0);
+		existeImagem = false;
+		PrimeFaces.current().ajax().update("form-editar");
+	}
+
+	public void selecionarUsuario(Usuario user) {
 		this.imagemInserida = new ArrayList<Usuario>();
 		this.usuario = user;
 		this.imagemInserida.add(user);
@@ -164,13 +158,13 @@ public class UserMB {
 		PrimeFaces.current().ajax().update("form-editar");
 		PrimeFaces.current().executeScript("PF('dialog-edit').show();");
 	}
-	
-	public void selecionarUsuarioExc(Usuario user){
+
+	public void selecionarUsuarioExc(Usuario user) {
 		this.usuario = user;
 		PrimeFaces.current().ajax().update("form-excluir");
 		PrimeFaces.current().executeScript("PF('dialog-exc').show();");
 	}
-	
+
 	public void checarCepCompletado(AjaxBehaviorEvent event) {
 		this.endereco = usuario.getEndereco();
 		String cep = this.endereco.getCep();
@@ -178,7 +172,7 @@ public class UserMB {
 		if (cepFormatado.length() == 8)
 			this.getEndereco(cepFormatado);
 	}
-	
+
 	public void getEndereco(String cep) {
 		try {
 			URLConnection con = getConnection("https://viacep.com.br/ws/" + cep + "/json/");
@@ -204,7 +198,7 @@ public class UserMB {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public URLConnection getConnection(String enderecoWS) {
 		URLConnection con = null;
 		try {
@@ -227,30 +221,30 @@ public class UserMB {
 
 	public Boolean validarEmail() {
 		Boolean emailValido = ValidaEmailUtil.isValidEmailAddressRegex(usuario.getEmail());
-		if(!emailValido)
-			MensageUtil.mensagemWarn("Email inválido", "Atenção");		
+		if (!emailValido)
+			MensageUtil.mensagemWarn("Email inválido", "Atenção");
 		return emailValido;
 	}
-	
+
 	public Boolean validarSenha() {
 		Boolean senhaValida = ValidaSenhaUtil.validarSenha(usuario.getSenha());
-		if(!senhaValida)
-			MensageUtil.mensagemWarn
-			("Senha inválida, certifique que a senha contém letras, números e que possua pelo menos 8 caracteres"
-			,"Atenção");	
+		if (!senhaValida)
+			MensageUtil.mensagemWarn(
+					"Senha inválida, certifique que a senha contém letras, números e que possua pelo menos 8 caracteres",
+					"Atenção");
 		return senhaValida;
 	}
-	
+
 	public Boolean validarCpf() {
 		Boolean cpfValido = ValidaCPFUtil.isCPF(usuario.getCpf());
-		if(!cpfValido)
-			MensageUtil.mensagemWarn("CPF inválido", "Atenção");		
+		if (!cpfValido)
+			MensageUtil.mensagemWarn("CPF inválido", "Atenção");
 		return cpfValido;
 	}
-	
+
 	public Boolean cpfJaCadastrado() {
 		Boolean cadastrado = usuarioDAO.existeCpfCadastrado(usuario.getCpf(), usuario.getId());
-		if(cadastrado) {
+		if (cadastrado) {
 			MensageUtil.mensagemWarn("CPF já cadastrado", "Atenção");
 			usuarios = usuarioDAO.listarUsuarios();
 		}
@@ -320,5 +314,5 @@ public class UserMB {
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
-		
+
 }
