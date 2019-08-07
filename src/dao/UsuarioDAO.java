@@ -10,17 +10,16 @@ import java.util.List;
 import connection.ConnectionFactory;
 import model.Endereco;
 import model.Usuario;
+import util.Queries;
 
 public class UsuarioDAO {
 
 	public Usuario loginUsuario(Usuario usuario) {
 		Usuario usuarioLogado = new Usuario();
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, nome, email, senha, cpf, celular, genero, excluido ");
-		sql.append("FROM public.users where email = ? and senha = ? and excluido is false");
+
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.LOGIN_USUARIO);
 			ps.setString(1, usuario.getEmail());
 			ps.setString(2, usuario.getSenha());
 			ResultSet rs = ps.executeQuery();
@@ -52,15 +51,11 @@ public class UsuarioDAO {
 
 	public boolean cadastroUsuario(Usuario usuario) {
 		Boolean cadastrado = false;
-		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO public.users( ");
-		sql.append("nome, email, senha, cpf, celular, genero, imagem) ");
-		sql.append("VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id");
 
 		Long idUsuario = null;
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.CADASTRO_USUARIO);
 			mapearPreparedStatement(usuario, ps);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next())
@@ -85,13 +80,9 @@ public class UsuarioDAO {
 
 	public boolean cadastroEndereco(Usuario usuario, Long idUsuarioCadastrado, Connection con) {
 		Boolean cadastrado = false;
-		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO public.endereco( ");
-		sql.append("id_usuario, cep, cidade, bairro, logradouro, numero) ");
-		sql.append("VALUES (?, ?, ?, ?, ?, ?);");
 
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.CADASTRO_ENDERECO);
 			ps.setLong(1, idUsuarioCadastrado);
 			ps.setString(2, usuario.getEndereco().getCep());
 			ps.setString(3, usuario.getEndereco().getLocalidade());
@@ -109,12 +100,9 @@ public class UsuarioDAO {
 
 	public List<Usuario> listarUsuarios() {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, nome, email, senha, cpf, celular, genero, excluido, senha, imagem ");
-		sql.append("FROM public.users WHERE excluido is false ORDER BY nome;");
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.LISTA_USUARIOS);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Usuario usuario = new Usuario();
@@ -143,12 +131,9 @@ public class UsuarioDAO {
 
 	public Endereco listarEnderecoUsuario(Long idUsuario) {
 		Endereco endereco = new Endereco();
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, cep, cidade, bairro, logradouro, numero ");
-		sql.append(" FROM public.endereco WHERE id_usuario = ?");
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.LISTA_ENDERECO_USUARIO);
 			ps.setLong(1, idUsuario);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -173,13 +158,9 @@ public class UsuarioDAO {
 
 	public boolean editaUsuario(Usuario usuario) {
 		Boolean editado = false;
-		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE public.users ");
-		sql.append("SET nome = ?, email = ?, senha = ?, cpf = ?, celular = ?, genero = ?, imagem = ? ");
-		sql.append("WHERE id = ?");
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.EDITA_USUARIO);
 			mapearPreparedStatement(usuario, ps);
 			ps.setLong(8, usuario.getId());
 			ps.executeUpdate();
@@ -199,8 +180,8 @@ public class UsuarioDAO {
 		}
 		return editado;
 	}
-	
-	public void mapearPreparedStatement(Usuario usuario, PreparedStatement ps){
+
+	public void mapearPreparedStatement(Usuario usuario, PreparedStatement ps) {
 		try {
 			ps.setString(1, usuario.getNome());
 			ps.setString(2, usuario.getEmail());
@@ -209,21 +190,17 @@ public class UsuarioDAO {
 			ps.setString(5, usuario.getCelular());
 			ps.setString(6, usuario.getGenero());
 			ps.setBytes(7, usuario.getImagem());
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 
+		}
 	}
 
 	public boolean editaEndereco(Usuario usuario, Connection con) {
 		Boolean editado = false;
-		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE public.endereco ");
-		sql.append("SET cep = ?, cidade = ?, bairro = ?, logradouro = ?, numero = ? ");
-		sql.append("WHERE id_usuario = ?");
 
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.EDITA_ENDERECO_USUARIO);
 			ps.setString(1, usuario.getEndereco().getCep());
 			ps.setString(2, usuario.getEndereco().getLocalidade());
 			ps.setString(3, usuario.getEndereco().getBairro());
@@ -276,13 +253,10 @@ public class UsuarioDAO {
 
 	public boolean excluiUsuario(Long idUsuario) {
 		Boolean excluido = false;
-		StringBuilder sql = new StringBuilder();
-		sql.append("UPDATE public.users ");
-		sql.append("SET excluido = true ");
-		sql.append("WHERE id = ?");
+
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.EXCLUI_USUARIO);
 			ps.setLong(1, idUsuario);
 			ps.executeUpdate();
 			con.commit();
@@ -301,12 +275,10 @@ public class UsuarioDAO {
 
 	public List<Usuario> filtroUsuarios(String nome) {
 		List<Usuario> usuarios = new ArrayList<Usuario>();
-		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT id, nome, email, senha, cpf, celular, genero, excluido, senha, imagem ");
-		sql.append("FROM public.users WHERE excluido is false and nome ilike ? ORDER BY nome;");
+		
 		Connection con = ConnectionFactory.getConnection();
 		try {
-			PreparedStatement ps = con.prepareStatement(sql.toString());
+			PreparedStatement ps = con.prepareStatement(Queries.FILTRO_USUARIO);
 			ps.setString(1, "%" + nome + "%");
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
