@@ -203,7 +203,7 @@ public class UsuarioMB {
 		URLConnection con = null;
 		try {
 			URL url = new URL(enderecoWS);
-			Optional<String> proxyUrl = Optional.ofNullable(("192.168.100.3"));
+			Optional<String> proxyUrl = Optional.ofNullable(("INSERT A PROXY IP"));
 			Optional<Integer> proxyPort = Optional.ofNullable((3128));
 			boolean isProxySet = Stream.of(proxyUrl, proxyPort).allMatch(Optional::isPresent);
 			if (isProxySet) {
